@@ -62,12 +62,9 @@ public class ConfigurationManager {
     private ConfigurationManager(Application context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferences.edit();
-
         defaults = new ConfigurationDefaults();
         initPreferences();
     }
-
-
 
     public String getString(String key) {
         return preferences.getString(key, null);
