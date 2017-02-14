@@ -80,7 +80,7 @@ public final class BTDownload implements BittorrentDownload {
         TorrentInfo ti = th.torrentFile();
         this.piecesTracker = ti != null ? new PiecesTracker(ti) : null;
         this.parts = ti != null ? new File(savePath, "." + ti.infoHash() + ".parts") : null;
-        this.extra = createExtra();
+        this.extra = getExtraData();
         this.paymentOptions = loadPaymentOptions(ti);
         this.innerListener = new InnerListener();
         engine.addListener(innerListener);
@@ -544,8 +544,8 @@ public final class BTDownload implements BittorrentDownload {
     }
 
     public Set<File> getIncompleteFiles() {
-        Set<File> s = new HashSet<>();
         try {
+            Set<File> s = new HashSet<>();
             if (!th.isValid()) {
                 return s;
             }
@@ -576,7 +576,7 @@ public final class BTDownload implements BittorrentDownload {
         } catch (Throwable e) {
             LOG.error("Error calculating the incomplete files set", e);
         }
-        return s;
+        return new HashSet<>();
     }
 
     public boolean isSequentialDownload() {
@@ -633,36 +633,40 @@ public final class BTDownload implements BittorrentDownload {
         }
     }
 
-    private Map<String, String> createExtra() {
+    /* @CLEANCODE: Dimitry Volker */
+    private Map<String, String> getExtraData(){
         Map<String, String> map = new HashMap<>();
-        try {
-            String infoHash = getInfoHash();
-            File file = engine.resumeDataFile(infoHash);
+        String infoHash = getInfoHash();
+        File file = engine.resumeDataFile(infoHash);
             if (file.exists()) {
-                byte[] arr = FileUtils.readFileToByteArray(file);
-                entry e = entry.bdecode(Vectors.bytes2byte_vector(arr));
-                string_entry_map d = e.dict();
-                if (d.has_key(EXTRA_DATA_KEY)) {
-                    readExtra(d.get(EXTRA_DATA_KEY).dict(), map);
+                string_entry_map dict = readExtraData(file);
+                string_vector keys = dict.keys();
+                int size = (int) keys.size();
+                for (int i = 0; i < size; i++) {
+                    String k = keys.get(i);
+                    entry e = dict.get(k);
+                    if (e.type() == entry.data_type.string_t) {
+                        map.put(k, e.string());
+                    }
                 }
             }
 
-        } catch (Throwable e) {
-            LOG.error("Error reading extra data from resume file", e);
-        }
         return map;
     }
 
-    private void readExtra(string_entry_map dict, Map<String, String> map) {
-        string_vector keys = dict.keys();
-        int size = (int) keys.size();
-        for (int i = 0; i < size; i++) {
-            String k = keys.get(i);
-            entry e = dict.get(k);
-            if (e.type() == entry.data_type.string_t) {
-                map.put(k, e.string());
+    /* @CLEANCODE: Dimitry Volker */
+    private string_entry_map readExtraData(File file){
+        try{
+            byte[] arr = FileUtils.readFileToByteArray(file);
+            entry e = entry.bdecode(Vectors.bytes2byte_vector(arr));
+            string_entry_map d = e.dict();
+            if (d.has_key(EXTRA_DATA_KEY)) {
+                return d.get(EXTRA_DATA_KEY).dict();
             }
+        }catch (Exception e){
+            LOG.error("Error reading extra data from resume file", e);
         }
+        return new string_entry_map();
     }
 
     public boolean wasPaused() {
