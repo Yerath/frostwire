@@ -638,19 +638,25 @@ public final class BTDownload implements BittorrentDownload {
         Map<String, String> map = new HashMap<>();
         String infoHash = getInfoHash();
         File file = engine.resumeDataFile(infoHash);
-            if (file.exists()) {
-                string_entry_map dict = readExtraData(file);
-                string_vector keys = dict.keys();
-                int size = (int) keys.size();
-                for (int i = 0; i < size; i++) {
-                    String k = keys.get(i);
-                    entry e = dict.get(k);
-                    if (e.type() == entry.data_type.string_t) {
-                        map.put(k, e.string());
-                    }
-                }
-            }
 
+        if (file.exists()) {
+            map = putStringEntryMapIntoMap(readExtraData(file));
+        }
+
+        return map;
+    }
+
+    private Map<String, String> putStringEntryMapIntoMap(string_entry_map dict){
+        Map<String, String> map = new HashMap<>();
+        string_vector keys = dict.keys();
+        int size = (int) keys.size();
+        for (int i = 0; i < size; i++) {
+            String k = keys.get(i);
+            entry e = dict.get(k);
+            if (e.type() == entry.data_type.string_t) {
+                map.put(k, e.string());
+            }
+        }
         return map;
     }
 
