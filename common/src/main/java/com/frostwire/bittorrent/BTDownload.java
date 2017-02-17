@@ -646,15 +646,16 @@ public final class BTDownload implements BittorrentDownload {
         return map;
     }
 
-    private Map<String, String> putStringEntryMapIntoMap(string_entry_map dict){
+    private Map<String, String> putStringEntryMapIntoMap(string_entry_map dictionary){
         Map<String, String> map = new HashMap<>();
-        string_vector keys = dict.keys();
+        string_vector keys = dictionary.keys();
         int size = (int) keys.size();
+
         for (int i = 0; i < size; i++) {
-            String k = keys.get(i);
-            entry e = dict.get(k);
+            String key = keys.get(i);
+            entry e = dictionary.get(k);
             if (e.type() == entry.data_type.string_t) {
-                map.put(k, e.string());
+                map.put(key, e.string());
             }
         }
         return map;
