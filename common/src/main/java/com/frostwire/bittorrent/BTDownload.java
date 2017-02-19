@@ -77,9 +77,13 @@ public final class BTDownload implements BittorrentDownload {
         this.th = th;
         this.savePath = new File(th.savePath());
         this.created = new Date(th.status().addedTime());
+
         TorrentInfo ti = th.torrentFile();
         this.piecesTracker = ti != null ? new PiecesTracker(ti) : null;
-        this.parts = ti != null ? new File(savePath, "." + ti.infoHash() + ".parts") : null;
+
+        String filename = "." + ti.infoHash() + ".parts";
+        this.parts = ti != null ? new File(savePath, filename) : null;
+
         this.extra = getExtraData();
         this.paymentOptions = loadPaymentOptions(ti);
         this.innerListener = new InnerListener();
@@ -640,7 +644,8 @@ public final class BTDownload implements BittorrentDownload {
         File file = engine.resumeDataFile(infoHash);
 
         if (file.exists()) {
-            map = putStringEntryMapIntoMap(readExtraData(file));
+            string_entry_map dictionary = readExtraData(file);
+            map = putStringEntryMapIntoMap(dictionary);
         }
 
         return map;
