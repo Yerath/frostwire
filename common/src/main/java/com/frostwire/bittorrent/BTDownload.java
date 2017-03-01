@@ -81,13 +81,17 @@ public final class BTDownload implements BittorrentDownload {
         TorrentInfo ti = th.torrentFile();
         this.piecesTracker = ti != null ? new PiecesTracker(ti) : null;
 
-        String filename = "." + ti.infoHash() + ".parts";
-        this.parts = ti != null ? new File(savePath, filename) : null;
+        /* @HERE */
+        this.parts = ti != null ? new File(savePath, "." + ti.infoHash() + ".parts") : null;
 
         this.extra = getExtraData();
         this.paymentOptions = loadPaymentOptions(ti);
         this.innerListener = new InnerListener();
         engine.addListener(innerListener);
+    }
+
+    public void remove(boolean deleteData) {
+        remove(false, deleteData);
     }
 
     public Map<String, String> getExtra() {
@@ -376,11 +380,6 @@ public final class BTDownload implements BittorrentDownload {
 
     public void remove() {
         remove(false, false);
-    }
-
-    @Override
-    public void remove(boolean deleteData) {
-        remove(false, deleteData);
     }
 
     public void remove(boolean deleteTorrent, boolean deleteData) {

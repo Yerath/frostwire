@@ -1,0 +1,5 @@
+projectKey=frost:wire
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/frost:wire
+ceTaskId=AVpk3n7nTnE137gfHA4F
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVpk3n7nTnE137gfHA4F
