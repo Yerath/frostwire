@@ -245,7 +245,7 @@ public final class BTEngine extends SessionManager {
             }
         }
 
-        download(ti, saveDir, priorities, null, null);
+        download(new TorrentContainer(ti, saveDir, priorities, null, null));
 
         if (!exists) {
             saveResumeTorrent(ti);
@@ -287,7 +287,7 @@ public final class BTEngine extends SessionManager {
             }
         }
 
-        download(ti, saveDir, priorities, null, peers);
+        download(new TorrentContainer(ti, saveDir, priorities, null, peers));
 
         if (!torrentHandleExists) {
             saveResumeTorrent(ti);
@@ -321,12 +321,12 @@ public final class BTEngine extends SessionManager {
             Priority[] priorities = th.filePriorities();
             if (priorities[fileIndex] == Priority.IGNORE) {
                 priorities[fileIndex] = Priority.NORMAL;
-                download(ti, saveDir, priorities, null, null);
+                download(new TorrentContainer(ti, saveDir, priorities, null, null));
             }
         } else {
             Priority[] priorities = Priority.array(Priority.IGNORE, ti.numFiles());
             priorities[fileIndex] = Priority.NORMAL;
-            download(ti, saveDir, priorities, null, null);
+            download(new TorrentContainer(ti, saveDir, priorities, null, null));
         }
 
         if (!exists) {
@@ -600,29 +600,29 @@ public final class BTEngine extends SessionManager {
         }
     }
 
-    private void download(TorrentInfo ti, File saveDir, Priority[] priorities, File resumeFile, List<TcpEndpoint> peers) {
+    private void download(TorrentContainer torrentContainer) {
 
-        TorrentHandle th = find(ti.infoHash());
+        TorrentHandle th = find(torrentContainer.getTi().infoHash());
 
         if (th != null) {
             // found a download with the same hash, just adjust the priorities if needed
-            if (priorities != null) {
-                if (ti.numFiles() != priorities.length) {
+            if (torrentContainer.getPriorities() != null) {
+                if (torrentContainer.getTi().numFiles() != torrentContainer.getPriorities().length) {
                     throw new IllegalArgumentException("The priorities length should be equals to the number of files");
                 }
 
-                th.prioritizeFiles(priorities);
+                th.prioritizeFiles(torrentContainer.getPriorities());
                 fireDownloadUpdate(th);
                 th.resume();
             } else {
                 // did they just add the entire torrent (therefore not selecting any priorities)
-                final Priority[] wholeTorrentPriorities = Priority.array(Priority.NORMAL, ti.numFiles());
+                final Priority[] wholeTorrentPriorities = Priority.array(Priority.NORMAL, torrentContainer.getTi().numFiles());
                 th.prioritizeFiles(wholeTorrentPriorities);
                 fireDownloadUpdate(th);
                 th.resume();
             }
         } else { // new download
-            download(ti, saveDir, resumeFile, priorities, peers);
+            download(torrentContainer.getTi(), torrentContainer.getSaveDir(), torrentContainer.getResumeFile(), torrentContainer.getPriorities(), torrentContainer.getPeers());
         }
     }
 
