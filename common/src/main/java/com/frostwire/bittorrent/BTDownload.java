@@ -561,25 +561,31 @@ public final class BTDownload implements BittorrentDownload {
             FileStorage fs = ti.files();
             String prefix = savePath.getAbsolutePath();
             long createdTime = created.getTime();
-            for (int i = 0; i < progress.length; i++) {
-                String fePath = fs.filePath(i);
-                long feSize = fs.fileSize(i);
-                if (progress[i] < feSize) {
-                    // lets see if indeed the file is incomplete
-                    File f = new File(prefix, fePath);
-                    if (!f.exists()) {
-                        continue; // nothing to do here
-                    }
-                    if (f.lastModified() >= createdTime) {
-                        // we have a file modified (supposedly) by this transfer
-                        s.add(f);
-                    }
-                }
-            }
+            s = checkIfFilesAreComplete(progress, fs, prefix, createdTime);
         } catch (Throwable e) {
             LOG.error("Error calculating the incomplete files set", e);
         }
         return new HashSet<>();
+    }
+
+    private Set<File> checkIfFilesAreComplete(long[] progress, FileStorage fs, String prefix, long createdTime) {
+        Set<File> s = new HashSet<>();
+        for (int i = 0; i < progress.length; i++) {
+            String fePath = fs.filePath(i);
+            long feSize = fs.fileSize(i);
+            if (progress[i] < feSize) {
+                // lets see if indeed the file is incomplete
+                File f = new File(prefix, fePath);
+                if (!f.exists()) {
+                    continue; // nothing to do here
+                }
+                if (f.lastModified() >= createdTime) {
+                    // we have a file modified (supposedly) by this transfer
+                    s.add(f);
+                }
+            }
+        }
+        return s;
     }
 
     public boolean isSequentialDownload() {
