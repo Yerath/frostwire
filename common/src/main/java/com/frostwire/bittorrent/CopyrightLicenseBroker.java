@@ -141,7 +141,7 @@ public class CopyrightLicenseBroker implements Mappable<String, Map<String, Stri
         this.attributionUrl = attributionUrl;
     }
 
-    public Map<String, Map<String, String>> asMap() {
+    public Map<String, Map<String, String>> toMap() {
         Map<String, Map<String, String>> container = new HashMap<String, Map<String, String>>();
         Map<String, String> innerMap = new HashMap<String, String>();
         innerMap.put("licenseUrl", this.license.getUrl());

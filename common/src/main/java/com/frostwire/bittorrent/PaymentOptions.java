@@ -85,7 +85,7 @@ public class PaymentOptions implements Mappable<String, Map<String, String>> {
         }
     }
 
-    public Map<String, Map<String, String>> asMap() {
+    public Map<String, Map<String, String>> toMap() {
         Map<String, String> innerMap = new HashMap<>();
         if (!StringUtils.isNullOrEmpty(bitcoin)) {
             innerMap.put("bitcoin", bitcoin);
