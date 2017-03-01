@@ -616,8 +616,7 @@ public final class BTEngine extends SessionManager {
                 th.resume();
             } else {
                 // did they just add the entire torrent (therefore not selecting any priorities)
-                final Priority[] wholeTorrentPriorities = Priority.array(Priority.NORMAL, torrentContainer.getTi().numFiles());
-                th.prioritizeFiles(wholeTorrentPriorities);
+                th.prioritizeFiles(Priority.array(Priority.NORMAL, torrentContainer.getTi().numFiles()));
                 fireDownloadUpdate(th);
                 th.resume();
             }
