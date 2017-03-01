@@ -35,7 +35,7 @@ public class ExtraData {
         return new string_entry_map();
     }
 
-    public Map<String, String> putStringEntryMapIntoMap(string_entry_map dictionary){
+    public static Map<String, String> putStringEntryMapIntoMap(string_entry_map dictionary){
         Map<String, String> map = new HashMap<>();
         string_vector keys = dictionary.keys();
         int size = (int) keys.size();
