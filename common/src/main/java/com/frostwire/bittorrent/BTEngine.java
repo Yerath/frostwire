@@ -480,7 +480,7 @@ public final class BTEngine extends SessionManager {
     private void fireDownloadAdded(TorrentAlert<?> alert) {
         try {
             TorrentHandle th = find(alert.handle().infoHash());
-            BTDownload dl = new BTDownload(this, th);
+            BTDownload dl = BTDownload.createNewDownload(this, th);
             if (listener != null) {
                 listener.downloadAdded(this, dl);
             }
@@ -491,7 +491,7 @@ public final class BTEngine extends SessionManager {
 
     private void fireDownloadUpdate(TorrentHandle th) {
         try {
-            BTDownload dl = new BTDownload(this, th);
+            BTDownload dl = BTDownload.createNewDownload(this, th);
             if (listener != null) {
                 listener.downloadUpdate(this, dl);
             }

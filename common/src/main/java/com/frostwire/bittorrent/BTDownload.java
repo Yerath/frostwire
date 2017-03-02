@@ -72,7 +72,7 @@ public final class BTDownload implements BittorrentDownload {
 
     private final InnerListener innerListener;
 
-    public BTDownload(BTEngine engine, TorrentHandle th) {
+    private BTDownload(BTEngine engine, TorrentHandle th) {
         this.engine = engine;
         this.th = th;
         this.savePath = new File(th.savePath());
@@ -88,6 +88,10 @@ public final class BTDownload implements BittorrentDownload {
         this.paymentOptions = loadPaymentOptions(ti);
         this.innerListener = new InnerListener();
         engine.addListener(innerListener);
+    }
+
+    public static BTDownload createNewDownload(BTEngine engine, TorrentHandle th) {
+        return new BTDownload(engine, th);
     }
 
     public void remove(boolean deleteData) {
