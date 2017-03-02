@@ -56,7 +56,7 @@ public class BTInfoAdditionalMetadataHolder {
         boolean hasPaymentOptions = paymentOptionsEntry != null;
 
         if (hasLicense) {
-            license = new CopyrightLicenseBroker(licenseEntry.dictionary());
+            license = CopyrightLicenseBroker.createCopyrightLicenseBrokerWithMap(licenseEntry.dictionary());
         } else {
             license = null;
         }

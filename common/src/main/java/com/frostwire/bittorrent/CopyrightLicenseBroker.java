@@ -32,6 +32,14 @@ import com.frostwire.licenses.*;
  */
 public class CopyrightLicenseBroker implements Mappable<String, Map<String, String>> {
 
+    public static CopyrightLicenseBroker createCopyrightLicenseBroker(boolean shareAlike, boolean nonCommercial, boolean noDerivatives, String attributionTitle, String attributionAuthor, String attributionURL) {
+        return new CopyrightLicenseBroker(shareAlike, nonCommercial, noDerivatives, attributionTitle, attributionAuthor, attributionURL);
+    }
+
+    public static CopyrightLicenseBroker createCopyrightLicenseBrokerWithMap(Map<String, Entry> map) {
+        return new CopyrightLicenseBroker(map);
+    }
+
     public enum LicenseCategory {
         CreativeCommons("creative-commons"), OpenSource("open-source"), PublicDomain("public-domain"), NoLicense("no-license");
 
@@ -89,7 +97,7 @@ public class CopyrightLicenseBroker implements Mappable<String, Map<String, Stri
         urlToLicense.put(Licenses.PUBLIC_DOMAIN_CC0.getUrl(), Licenses.PUBLIC_DOMAIN_CC0);
     }
 
-    public CopyrightLicenseBroker(boolean shareAlike, boolean nonCommercial, boolean noDerivatives, String attributionTitle, String attributionAuthor, String attributionURL) {
+    private CopyrightLicenseBroker(boolean shareAlike, boolean nonCommercial, boolean noDerivatives, String attributionTitle, String attributionAuthor, String attributionURL) {
         licenseCategory = LicenseCategory.CreativeCommons;
         final String licenseUrl = getCreativeCommonsLicenseUrl(shareAlike, nonCommercial, noDerivatives);
         if (!isInvalidLicense(licenseUrl)) {
@@ -107,7 +115,7 @@ public class CopyrightLicenseBroker implements Mappable<String, Map<String, Stri
      *
      * @param map
      */
-    public CopyrightLicenseBroker(Map<String, Entry> map) {
+    private CopyrightLicenseBroker(Map<String, Entry> map) {
         if (map.containsKey("creative-commons")) {
             licenseCategory = LicenseCategory.CreativeCommons;
         } else if (map.containsKey("open-source")) {
