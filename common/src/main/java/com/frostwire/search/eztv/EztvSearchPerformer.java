@@ -31,7 +31,7 @@ import java.util.Map;
  * @author gubatron
  * @author aldenml
  */
-public class EztvSearchPerformer extends TorrentRegexSearchPerformer<EztvSearchResult> {
+public class EztvSearchPerformer extends TorrentRegexSearchPerformer<SearchResult> {
 
     private static final int MAX_RESULTS = 20;
     private static final String REGEX = "(?is)<a href=\"(/ep/.*?)\"";
@@ -76,7 +76,7 @@ public class EztvSearchPerformer extends TorrentRegexSearchPerformer<EztvSearchR
     }
 
     @Override
-    protected EztvSearchResult fromHtmlMatcher(CrawlableSearchResult sr, SearchMatcher matcher) {
+    protected SearchResult fromHtmlMatcher(CrawlableSearchResult sr, SearchMatcher matcher) {
         return new EztvSearchResult(sr.getDetailsUrl(), matcher);
     }
 

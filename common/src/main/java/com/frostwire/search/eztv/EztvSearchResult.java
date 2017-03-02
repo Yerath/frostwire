@@ -33,7 +33,7 @@ import java.util.Locale;
  * @author gubatron
  * @author aldenml
  */
-final class EztvSearchResult extends AbstractTorrentSearchResult {
+final class EztvSearchResult extends AbstractTorrentSearchResult implements SearchResult {
 
     private final String filename;
     private final String displayName;
