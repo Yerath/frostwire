@@ -245,7 +245,7 @@ public final class BTEngine extends SessionManager {
             }
         }
 
-        download(new TorrentContainer(ti, saveDir, priorities, null, null));
+        download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(null).createTorrentContainer());
 
         if (!exists) {
             saveResumeTorrent(ti);
@@ -287,7 +287,7 @@ public final class BTEngine extends SessionManager {
             }
         }
 
-        download(new TorrentContainer(ti, saveDir, priorities, null, peers));
+        download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(peers).createTorrentContainer());
 
         if (!torrentHandleExists) {
             saveResumeTorrent(ti);
@@ -321,12 +321,12 @@ public final class BTEngine extends SessionManager {
             Priority[] priorities = th.filePriorities();
             if (priorities[fileIndex] == Priority.IGNORE) {
                 priorities[fileIndex] = Priority.NORMAL;
-                download(new TorrentContainer(ti, saveDir, priorities, null, null));
+                download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(null).createTorrentContainer());
             }
         } else {
             Priority[] priorities = Priority.array(Priority.IGNORE, ti.numFiles());
             priorities[fileIndex] = Priority.NORMAL;
-            download(new TorrentContainer(ti, saveDir, priorities, null, null));
+            download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(null).createTorrentContainer());
         }
 
         if (!exists) {
