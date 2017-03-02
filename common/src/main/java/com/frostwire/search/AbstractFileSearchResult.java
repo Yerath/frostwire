@@ -17,11 +17,54 @@
 
 package com.frostwire.search;
 
+import com.frostwire.licenses.License;
+
 /**
  * 
  * @author gubatron
  * @author aldenml
  *
  */
-public abstract class AbstractFileSearchResult extends AbstractSearchResult implements FileSearchResult {
+public abstract class AbstractFileSearchResult implements FileSearchResult {
+    protected final MyAbstractSearchResult abstractSearchResult = new MyAbstractSearchResult();
+
+    protected abstract String getDisplayName();
+
+    protected abstract String getDetailsUrl();
+
+    protected abstract String getSource();
+
+    public License getLicense() {
+        return abstractSearchResult.getLicense();
+    }
+
+    public long getCreationTime() {
+        return abstractSearchResult.getCreationTime();
+    }
+
+    public String toString() {
+        return abstractSearchResult.toString();
+    }
+
+    public String getThumbnailUrl() {
+        return abstractSearchResult.getThumbnailUrl();
+    }
+
+    public int uid() {
+        return abstractSearchResult.uid();
+    }
+
+    private class MyAbstractSearchResult extends AbstractSearchResult {
+        public String getDisplayName() {
+            return AbstractFileSearchResult.this.getDisplayName();
+        }
+
+        public String getDetailsUrl() {
+            return AbstractFileSearchResult.this.getDetailsUrl();
+        }
+
+        public String getSource() {
+            return AbstractFileSearchResult.this.getSource();
+        }
+    }
 }

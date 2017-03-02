@@ -51,7 +51,7 @@ public abstract class AbstractTorrentSearchResult extends AbstractFileSearchResu
     @Override
     public int uid() {
         if (uid == -1) {
-            String key = getDisplayName() + getDetailsUrl() + getSource() + getHash();
+            String key = abstractSearchResult.getDisplayName() + abstractSearchResult.getDetailsUrl() + abstractSearchResult.getSource() + getHash();
             uid = key.hashCode();
         }
         return uid;
@@ -59,7 +59,7 @@ public abstract class AbstractTorrentSearchResult extends AbstractFileSearchResu
 
     @Override
     public String getReferrerUrl() {
-        return getDetailsUrl();
+        return abstractSearchResult.getDetailsUrl();
     }
 
     protected long parseSize(String group) {
