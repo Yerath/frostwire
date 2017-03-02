@@ -18,8 +18,8 @@
 
 package com.frostwire.search.youtube;
 
-import com.frostwire.regex.Matcher;
-import com.frostwire.regex.Pattern;
+import com.frostwire.util.regex.Matcher;
+import com.frostwire.util.regex.Pattern;
 import com.frostwire.search.youtube.jd.JsFunction;
 
 /**

@@ -18,7 +18,7 @@
 
 package com.frostwire.search;
 
-import com.frostwire.regex.Matcher;
+import com.frostwire.util.regex.Matcher;
 
 /**
  * <strong>A memory conscious Matcher</strong><br/>

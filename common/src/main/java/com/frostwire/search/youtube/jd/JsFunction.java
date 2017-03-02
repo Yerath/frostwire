@@ -34,8 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.frostwire.regex.Matcher;
-import com.frostwire.regex.Pattern;
+import com.frostwire.util.regex.Matcher;
+import com.frostwire.util.regex.Pattern;
 
 /**
  * @author gubatron

@@ -19,7 +19,7 @@ package com.frostwire.search;
 
 import com.frostwire.jlibtorrent.FileStorage;
 import com.frostwire.jlibtorrent.TorrentInfo;
-import com.frostwire.regex.Pattern;
+import com.frostwire.util.regex.Pattern;
 import com.frostwire.search.torrent.TorrentCrawlableSearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.util.Logger;

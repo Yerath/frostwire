@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.frostwire.regex;
+package com.frostwire.util.regex;
 
 /**
  * Contains the position and group index of capture groups
