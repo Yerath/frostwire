@@ -80,7 +80,7 @@ public class DownloadTest {
     public void searchAudio_download() {
 
         //muckachina test part one (filtering Archive source)
-        // public void filterArchive() {
+        // public void filter_archive() {
 
         ViewInteraction linearLayout = onView(
                 allOf(withContentDescription("FrostWire, Open navigation drawer"),
