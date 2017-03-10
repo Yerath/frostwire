@@ -77,10 +77,10 @@ public class DownloadTest {
     };
 
     @Test
-    public void searchAudio_download() {
+    public void searchAudioDownload() {
 
         //muckachina test part one (filtering Archive source)
-        // public void filter_archive() {
+        // public void filterArchive() {
 
         ViewInteraction linearLayout = onView(
                 allOf(withContentDescription("FrostWire, Open navigation drawer"),
