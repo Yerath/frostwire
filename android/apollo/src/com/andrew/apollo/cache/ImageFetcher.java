@@ -237,6 +237,7 @@ public class ImageFetcher extends ImageWorker {
             while ((oneByte = in.read()) != -1) {
                 out.write(oneByte);
             }
+            out.close();
             return tempFile;
         } catch (final IOException ignored) {
         } finally {
