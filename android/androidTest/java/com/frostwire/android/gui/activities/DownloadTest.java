@@ -77,7 +77,7 @@ public class DownloadTest {
     };
 
     @Test
-    public void searchAudio_download() {
+    public void searchAudioDownload() {
 
         //muckachina test part one (filtering Archive source)
         // public void filterArchive() {
