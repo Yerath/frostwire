@@ -238,6 +238,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
             case MotionEvent.ACTION_CANCEL:
                 mDragging = false;
                 break;
+            default: break;
         }
         return false;
     }
