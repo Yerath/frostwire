@@ -26,11 +26,11 @@ public class BTSettings extends SessionManager {
     }
 
     private SessionParams defaultParams() {
-        SettingsPack sp = defaultSettings();
+        SettingsPack sp = setDefaultSettings();
         SessionParams params = new SessionParams(sp);
         return params;
     }
-    private static SettingsPack defaultSettings() {
+    private static SettingsPack setDefaultSettings() {
         SettingsPack sp = new SettingsPack();
 
         sp.broadcastLSD(true);
@@ -59,32 +59,56 @@ public class BTSettings extends SessionManager {
 
     private SessionParams loadSettings() {
         try {
+            //Retrieve file
             File f = settingsFile();
             if (f.exists()) {
-                byte[] data = FileUtils.readFileToByteArray(f);
-                byte_vector buffer = Vectors.bytes2byte_vector(data);
-                bdecode_node n = new bdecode_node();
-                error_code ec = new error_code();
-                int ret = bdecode_node.bdecode(buffer, n, ec);
-
-                if (ret == 0) {
-                    String stateVersion = n.dict_find_string_value_s(STATE_VERSION_KEY);
-                    if (!STATE_VERSION_VALUE.equals(stateVersion)) {
-                        return defaultParams();
-                    }
-
-                    session_params params = libtorrent.read_session_params(n);
-                    buffer.clear(); // prevents GC
-                    return new SessionParams(params);
-                } else {
-                    LOG.error("Can't decode session state data: " + ec.message());
-                    return defaultParams();
-                }
+                return retrieveSettingsFromFile();
             } else {
                 return defaultParams();
             }
         } catch (Throwable e) {
             LOG.error("Error loading session state", e);
+            return defaultParams();
+        }
+    }
+
+    private SessionParams retrieveSettingsFromFile() {
+        try{
+            bdecode_node n = decodeSettingsFile();
+            return convertDecodeSettingsToSessionParams(n);
+        }catch (IOException e){
+            return defaultParams();
+        }
+    }
+
+
+    private bdecode_node decodeSettingsFile() throws IOException { {
+        //Decode the file.
+        byte[] data = FileUtils.readFileToByteArray(f);
+        byte_vector buffer = Vectors.bytes2byte_vector(data);
+        bdecode_node n = new bdecode_node();
+        error_code ec = new error_code();
+
+        int ret = bdecode_node.bdecode(buffer, n, ec);
+        if( ret == 0) {
+            return n;
+        }
+
+        throw new IOException("Unable to decode file due to: " + ec.message());
+    }
+
+    private SessionParams convertDecodeSettingsToSessionParams(n) {
+
+        if( ret == 0) {
+            String stateVersion = n.dict_find_string_value_s(STATE_VERSION_KEY);
+            if (!STATE_VERSION_VALUE.equals(stateVersion)) {
+                return defaultParams();
+            }
+            session_params params = libtorrent.read_session_params(n);
+            buffer.clear(); // prevents GC
+            return new SessionParams(params);
+        }else{
+            LOG.error("Can't decode session state data: " + ec.message());
             return defaultParams();
         }
     }
