@@ -285,7 +285,7 @@ public final class BTEngine extends SessionManager {
         File[] torrents = ctx.homeDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name != null && FilenameUtils.getExtension(name).toLowerCase().equals("torrent");
+                return name != null && FilenameUtils.getExtension(name).equalsIgnoreCase("torrent");
             }
         });
 
@@ -347,23 +347,6 @@ public final class BTEngine extends SessionManager {
         } catch (Throwable e) {
             LOG.error("Unable to notify update the a download", e);
         }
-    }
-
-    private void onListenSucceeded(ListenSucceededAlert alert) {
-        try {
-            String endp = alert.address() + ":" + alert.port();
-            String s = "endpoint: " + endp + " type:" + alert.socketType();
-            LOG.info("Listen succeeded on " + s);
-        } catch (Throwable e) {
-            LOG.error("Error adding listen endpoint to internal list", e);
-        }
-    }
-
-    private void onListenFailed(ListenFailedAlert alert) {
-        String endp = alert.address() + ":" + alert.port();
-        String s = "endpoint: " + endp + " type:" + alert.socketType();
-        String message = alert.error().message();
-        LOG.info("Listen failed on " + s + " (error: " + message + ")");
     }
 
     private void migrateVuzeDownloads() {
@@ -482,6 +465,27 @@ public final class BTEngine extends SessionManager {
                     break;
             }
         }
+
+        private void printAlert(Alert alert) {
+            System.out.println("Log: " + alert);
+        }
+
+        private void onListenSucceeded(ListenSucceededAlert alert) {
+            try {
+                String endp = alert.address() + ":" + alert.port();
+                String s = "endpoint: " + endp + " type:" + alert.socketType();
+                LOG.info("Listen succeeded on " + s);
+            } catch (Throwable e) {
+                LOG.error("Error adding listen endpoint to internal list", e);
+            }
+        }
+
+        private void onListenFailed(ListenFailedAlert alert) {
+            String endp = alert.address() + ":" + alert.port();
+            String s = "endpoint: " + endp + " type:" + alert.socketType();
+            String message = alert.error().message();
+            LOG.info("Listen failed on " + s + " (error: " + message + ")");
+        }
     }
 
     private void onExternalIpAlert(ExternalIpAlert alert) {
@@ -502,10 +506,6 @@ public final class BTEngine extends SessionManager {
         } catch (Throwable e) {
             LOG.error("Error logging fastresume rejected alert", e);
         }
-    }
-
-    private void printAlert(Alert alert) {
-        System.out.println("Log: " + alert);
     }
 
     private final class RestoreDownloadTask implements Runnable {
