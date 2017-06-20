@@ -100,7 +100,8 @@ public final class BTEngine extends SessionManager {
 
     @Override
     public void start() {
-        SessionParams params = loadSettings();
+        BTSettings btSettings = new BTSettings();
+        SessionParams params = BTSettings.retrieveSettings();
 
         settings_pack sp = params.settings().swig();
         sp.set_str(settings_pack.string_types.listen_interfaces.swigValue(), ctx.interfaces);
@@ -123,6 +124,11 @@ public final class BTEngine extends SessionManager {
     @Override
     protected void onBeforeStop() {
         removeListener(innerListener);
+        BTSettings.saveSettings();
+    }
+
+    @Override
+    protected void onApplySettings(SettingsPack sp) {
         saveSettings();
     }
 
@@ -142,49 +148,6 @@ public final class BTEngine extends SessionManager {
         super.moveStorage(dataDir);
     }
 
-    private SessionParams loadSettings() {
-        try {
-            File f = settingsFile();
-            if (f.exists()) {
-                byte[] data = FileUtils.readFileToByteArray(f);
-                byte_vector buffer = Vectors.bytes2byte_vector(data);
-                bdecode_node n = new bdecode_node();
-                error_code ec = new error_code();
-                int ret = bdecode_node.bdecode(buffer, n, ec);
-
-                if (ret == 0) {
-                    String stateVersion = n.dict_find_string_value_s(STATE_VERSION_KEY);
-                    if (!STATE_VERSION_VALUE.equals(stateVersion)) {
-                        return defaultParams();
-                    }
-
-                    session_params params = libtorrent.read_session_params(n);
-                    buffer.clear(); // prevents GC
-                    return new SessionParams(params);
-                } else {
-                    LOG.error("Can't decode session state data: " + ec.message());
-                    return defaultParams();
-                }
-            } else {
-                return defaultParams();
-            }
-        } catch (Throwable e) {
-            LOG.error("Error loading session state", e);
-            return defaultParams();
-        }
-    }
-
-    private SessionParams defaultParams() {
-        SettingsPack sp = defaultSettings();
-        SessionParams params = new SessionParams(sp);
-        return params;
-    }
-
-    @Override
-    protected void onApplySettings(SettingsPack sp) {
-        saveSettings();
-    }
-
     @Override
     public byte[] saveState() {
         if (swig() == null) {
@@ -195,29 +158,6 @@ public final class BTEngine extends SessionManager {
         swig().save_state(e);
         e.set(STATE_VERSION_KEY, STATE_VERSION_VALUE);
         return Vectors.byte_vector2bytes(e.bencode());
-    }
-
-    private void saveSettings() {
-        if (swig() == null) {
-            return;
-        }
-
-        try {
-            byte[] data = saveState();
-            FileUtils.writeByteArrayToFile(settingsFile(), data);
-        } catch (Throwable e) {
-            LOG.error("Error saving session state", e);
-        }
-    }
-
-    public void revertToDefaultConfiguration() {
-        if (swig() == null) {
-            return;
-        }
-
-        SettingsPack sp = defaultSettings();
-
-        applySettings(sp);
     }
 
     public void download(File torrent, File saveDir, boolean[] selection) {
@@ -384,10 +324,6 @@ public final class BTEngine extends SessionManager {
         migrateVuzeDownloads();
 
         runNextRestoreDownloadTask();
-    }
-
-    File settingsFile() {
-        return new File(ctx.homeDir, "settings.dat");
     }
 
     File resumeTorrentFile(String infoHash) {
@@ -732,32 +668,5 @@ public final class BTEngine extends SessionManager {
         sb.append("outer.silotis.us:6881");
 
         return sb.toString();
-    }
-
-    private static SettingsPack defaultSettings() {
-        SettingsPack sp = new SettingsPack();
-
-        sp.broadcastLSD(true);
-
-        if (ctx.optimizeMemory) {
-            int maxQueuedDiskBytes = sp.maxQueuedDiskBytes();
-            sp.maxQueuedDiskBytes(maxQueuedDiskBytes / 2);
-            int sendBufferWatermark = sp.sendBufferWatermark();
-            sp.sendBufferWatermark(sendBufferWatermark / 2);
-            sp.cacheSize(256);
-            sp.activeDownloads(4);
-            sp.activeSeeds(4);
-            sp.maxPeerlistSize(200);
-            //sp.setGuidedReadCache(true);
-            sp.tickInterval(1000);
-            sp.inactivityTimeout(60);
-            sp.seedingOutgoingConnections(false);
-            sp.connectionsLimit(200);
-        } else {
-            sp.activeDownloads(10);
-            sp.activeSeeds(10);
-        }
-
-        return sp;
     }
 }
