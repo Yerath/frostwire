@@ -105,7 +105,6 @@
     <string name="about">О томе</string>
     <string name="remove_ads">Ремове Адс</string>
     <string name="remove_ads_description">Уживајте у без огласа искуства, подржава ФростВире</string>
-    <string name="send_to_third_party">Сенд/Додај</string>
     <string name="send_file_using">Пошаљи датотеку користећи</string>
     <string name="my_files">Моје датотеке</string>
     <string name="clear_messages">јасне поруке</string>
@@ -237,17 +236,12 @@
     <string name="media_player_failed">Медиа плаиер фаилед</string>
     <string name="activity_media_player_name">медиа плаиер</string>
     <string name="search_settings">Подешавања претраге</string>
-    <string name="use_clearbits">Користе ClearBits.net</string>
     <string name="use_tpb">Користе TPB</string>
     <string name="use_tpb_summary">TPB је магнет за базиран, ради само на Вифи</string>
     <string name="use_monova">Користе Monova</string>
     <string name="use_monova_summary">Monova је магнет за базиран, ради само на Вифи</string>
-    <string name="use_kat">Користе KAT</string>
-    <string name="use_kat_summary">КАТ магнета заснована, ради само на Вифи</string>
     <string name="use_extratorrent">Користе ExtraTorrent.com</string>
-    <string name="use_isohunt">Користе ISOHunt.com</string>
-    <string name="use_mininova">Користе Mininova.org</string>
-    <string name="use_vertor">Користе Vertor.com</string>
+    <string name="use_zooqle">Користе Zooqle.com</string>
     <string name="use_yify">Користе Yify</string>
     <string name="use_yify_summary">Yify је магнет за базиран, ради само на Вифи</string>
     <string name="activity_media_player_image_description">Medijska слика</string>
@@ -430,7 +424,6 @@
     <string name="anonymous_usage_statistics">Анонимни Статистика приступа</string>
     <string name="anonymous_usage_statistics_summary">Пошаљи анонимну статистику коришћења. Нема информација да лично не идентификује ће се чувати на диску или послати преко мреже.</string>
     <string name="paused_song_name">Паузирано %s</string>
-    <string name="use_bitsnoop">Користе BitSnoop</string>
     <string name="use_torlock">Користе TorLock</string>
     <string name="use_torrentdownloads">Користе TorrentDownloads</string>
     <string name="use_limetorrents">Користе Limetorrents</string>
@@ -509,7 +502,6 @@
     <string name="my_music">Моја музика</string>
     <string name="support">подршка</string>
     <string name="wifi_sharing_settings">Ви-Фи Подешавања дељења</string>
-    <string name="use_btjunkie">Користе BTJunkie</string>
     <string name="free_download">Бесплатно скидање</string>
     <string name="error_no_space_left_on_device">Грешка: Нема простора лево да сачувате фајл</string>
     <string name="free_sponsored_app">Фрее Спонзорисана апликација</string>
@@ -636,6 +628,24 @@
     <string name="donate_your_time">Донате време</string>
     <string name="changelog">Changelog</string>
     <string name="pro">PRO</string>
-
-
+    <string name="cloud_download_aborted_on_mobile_data">Актуелна поставка спречава преузимање када није на Ви-Фи мрежи</string>
+    <string name="delete_started_torrents_summary">Обриши .торрент фајлове након почетка преузимања</string>
+    <string name="dismiss">одбацити</string>
+    <string name="search_preferences_one_engine_checked_always">По дефаулту, један претраживач треба да се провери у сваком тренутку</string>
+    <string name="switch_off_engine_without_vpn">ВПН је неактиван, заустављање БитТоррент мотор.</string>
+    <string name="number_picker_tip">Савет: додир изабран број да користе тастатуру</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">Без Ви-Фи доступан, сви трансфери су престали</string>
+    <string name="vpn_drop_protection_title">ВПН Заштита је неактиван</string>
+    <string name="deselect_all">Поништите све</string>
+    <string name="data_saving_kill_http_warning">То ће зауставити све недовршене трансфере у току</string>
+    <string name="delete_started_torrents">Делете .торрент филес</string>
+    <string name="unlimited">неограничен</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">Према поставкама не могу почети сетву, осим ако сте на Ви-Фи због уштеда података. Фајл ће бити спреман за сијање аутоматски када се вратиш на интернет омогућен Ви-Фи мрежу.</string>
+    <string name="vpn_drop_protection_summary">Заштитили своју приватност. Аутоматски искључити БитТоррент трансфера, осим ако кодиран ВПН веза активна</string>
+    <string name="cannot_start_engine_without_vpn">Додато неће почети осим ВПН је доступан. (Проверите подешавања)</string>
+    <string name="use_magnet_summary">На основу магнетних линкова, ради само на Вифи</string>
+    <string name="mobile_data_saving">Мобиле података Уштеда</string>
+    <string name="data_saving_kill_http_warning_title">Упозорење: хттп трансфери у току</string>
+    <string name="fullscreen">цео екран</string>
 </resources>

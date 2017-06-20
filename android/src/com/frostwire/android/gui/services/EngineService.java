@@ -1,19 +1,18 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.frostwire.android.gui.services;
@@ -28,6 +27,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
+
 import com.andrew.apollo.MediaButtonIntentReceiver;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -43,7 +43,6 @@ import com.frostwire.android.util.SystemUtils;
 import com.frostwire.bittorrent.BTEngine;
 import com.frostwire.util.Logger;
 import com.frostwire.util.ThreadPool;
-import com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver;
 import com.squareup.okhttp.ConnectionPool;
 
 import java.io.File;
@@ -58,6 +57,8 @@ public class EngineService extends Service implements IEngineService {
     public final static int FROSTWIRE_STATUS_NOTIFICATION = 0x4ac4642a; // just a random number
     private static final Logger LOG = Logger.getLogger(EngineService.class);
     private final static long[] VENEZUELAN_VIBE = buildVenezuelanVibe();
+
+    private static final String SHUTDOWN_ACTION = "com.frostwire.android.engine.SHUTDOWN";
 
     private final IBinder binder;
     static final ExecutorService threadPool = ThreadPool.newThreadPool("Engine");
@@ -85,11 +86,18 @@ public class EngineService extends Service implements IEngineService {
         if (intent == null) {
             return 0;
         }
+
+        if (SHUTDOWN_ACTION.equals(intent.getAction())) {
+            LOG.info("onStartCommand() - Received SHUTDOWN_ACTION");
+            shutdownSupport();
+            return START_NOT_STICKY;
+        }
+
         LOG.info("FrostWire's EngineService started by this intent:");
         LOG.info("FrostWire:" + intent.toString());
         LOG.info("FrostWire: flags:" + flags + " startId: " + startId);
 
-        enableReceivers(true);
+        enableComponents(true);
 
         initializePermanentNotificationUpdates();
 
@@ -98,15 +106,24 @@ public class EngineService extends Service implements IEngineService {
 
     @Override
     public void onDestroy() {
-        LOG.debug("EngineService onDestroy");
-        enableReceivers(false);
+        LOG.debug("onDestroy");
+    }
+
+    private void shutdownSupport() {
+        LOG.debug("shutdownSupport");
+        enableComponents(false);
         disablePermanentNotificationUpdates();
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
         stopServices(false);
+        LOG.debug("onDestroy, stopping BTEngine...");
         BTEngine.getInstance().stop();
+        LOG.debug("onDestroy, BTEngine stopped");
         ImageLoader.getInstance(this).shutdown();
         PlayStore.getInstance().dispose();
         stopOkHttp();
+
+        stopForeground(true);
+        stopSelf();
     }
 
     // what a bad design to properly shutdown the framework threads!
@@ -127,14 +144,20 @@ public class EngineService extends Service implements IEngineService {
         }
     }
 
-    private void enableReceivers(boolean enable) {
+    private void enableComponents(boolean enable) {
         PackageManager pm = getPackageManager();
-        enableReceiver(pm, ImIdShareBroadCastReceiver.class, enable);
-        enableReceiver(pm, EngineBroadcastReceiver.class, enable);
-        enableReceiver(pm, MediaButtonIntentReceiver.class, enable);
+
+        // receivers
+        enableComponent(pm, EngineBroadcastReceiver.class, enable);
+        enableComponent(pm, MediaButtonIntentReceiver.class, enable);
+        enableComponent(pm, io.presage.receiver.NetworkChangeReceiver.class, enable);
+        enableComponent(pm, io.presage.receiver.AlarmReceiver.class, enable);
+
+        // third party services
+        enableComponent(pm, io.presage.PresageService.class, enable);
     }
 
-    private void enableReceiver(PackageManager pm, Class<?> clazz, boolean enable) {
+    private void enableComponent(PackageManager pm, Class<?> clazz, boolean enable) {
         int newState = enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
         ComponentName receiver = new ComponentName(this, clazz);
@@ -218,7 +241,9 @@ public class EngineService extends Service implements IEngineService {
 
         state = STATE_STOPPING;
 
+        LOG.info("Pausing BTEngine...");
         BTEngine.getInstance().pause();
+        LOG.info("Pausing BTEngine paused");
 
         state = disconnected ? STATE_DISCONNECTED : STATE_STOPPED;
         LOG.info("Engine stopped, state: " + state);
@@ -255,9 +280,12 @@ public class EngineService extends Service implements IEngineService {
 
     @Override
     public void shutdown() {
-        LOG.info("shutdown()");
-        stopForeground(true);
-        stopSelf();
+        LOG.info("shutdown");
+
+        Context ctx = getApplication();
+        Intent i = new Intent(ctx, EngineService.class);
+        i.setAction(SHUTDOWN_ACTION);
+        ctx.startService(i);
     }
 
     public class EngineServiceBinder extends Binder {

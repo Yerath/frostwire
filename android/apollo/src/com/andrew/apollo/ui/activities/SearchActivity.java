@@ -115,8 +115,7 @@ public final class SearchActivity extends AbstractActivity implements LoaderCall
         setToolbarView(v);
 
         TextView title = findView(R.id.view_toolbar_header_title);
-        // R.string.app_name is actually "My Music" (from original apollo code)
-        title.setText(R.string.app_name);
+        title.setText(R.string.my_music);
     }
 
     @Override
@@ -172,10 +171,10 @@ public final class SearchActivity extends AbstractActivity implements LoaderCall
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Search view
-        getMenuInflater().inflate(R.menu.apollo_menu_search, menu);
+        getMenuInflater().inflate(R.menu.player_search, menu);
 
         // Filter the list the user is looking it via SearchView
-        mSearchView = (SearchView) menu.findItem(R.id.apollo_menu_item_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.menu_player_search).getActionView();
         mSearchView.setOnQueryTextListener(this);
 
         // Add voice search
@@ -505,8 +504,10 @@ public final class SearchActivity extends AbstractActivity implements LoaderCall
     private void setSubtitle(String s) {
         if (!TextUtils.isEmpty(s)) {
             TextView subtitle = findView(R.id.view_toolbar_header_subtitle);
-            subtitle.setVisibility(View.VISIBLE);
-            subtitle.setText("\"" + s + "\"");
+            if (subtitle != null) {
+                subtitle.setVisibility(View.VISIBLE);
+                subtitle.setText("\"" + s + "\"");
+            }
         }
     }
 }

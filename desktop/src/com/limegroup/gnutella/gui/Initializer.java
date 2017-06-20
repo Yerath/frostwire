@@ -60,7 +60,7 @@ public final class Initializer {
      * If this throws any exceptions, then LimeWire was not able to construct
      * properly and must be shut down.
      */
-    void initialize(String args[], Frame awtSplash) throws Throwable {
+    void initialize(String args[], Frame awtSplash) {
         // ** THE VERY BEGINNING -- DO NOT ADD THINGS BEFORE THIS **
         //System.out.println("Initializer.initialize() preinit()");
         preinit();
@@ -133,10 +133,6 @@ public final class Initializer {
 
         // Run any after-init tasks.
         postinit();
-    }
-
-    private boolean canStartBitTorrentWithCurrentVPNSettingsAndStatus() {
-        return !ConnectionSettings.VPN_DROP_PROTECTION.getValue() || VPNs.isVPNActive();
     }
 
     /**
@@ -477,14 +473,14 @@ public final class Initializer {
         ctx.retries = port1 - port0;
 
         BTEngine.ctx = ctx;
-
-        if (canStartBitTorrentWithCurrentVPNSettingsAndStatus()) {
-            BTEngine.getInstance().start();
-        }
+        BTEngine btEngine = BTEngine.getInstance();
+        btEngine.start();
 
         if (!SharingSettings.ENABLE_DISTRIBUTED_HASH_TABLE.getValue()) {
             BTEngine.getInstance().stopDht();
         }
+
+        VPNStatusRefresher.getInstance().addRefreshListener(new VPNDropGuard());
     }
 
     /**

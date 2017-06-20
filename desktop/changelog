@@ -1,6 +1,36 @@
-frostwire (6.4.5) stable; urgency=high
-  * New VPN-Drop protection setting. Automatically stop all BitTorrent traffic
+frostwire (6.4.8) stable; urgency=high
+  * New jlibtorrent 1.2.0.9-RC1
+  * New Zooqle search
+  * Monova, TorLock, YT search fixed
+  * Mininova search discontinued
+  * Freeze/Slowdown on shutdown fixed
+	
+ -- FrostWire Team <contact@frostwire.com>  Thu, 21 Apr 2017 21:55:45 -0600
+
+frostwire (6.4.7) stable; urgency=high
+  * New jlibtorrent 1.2.0.7-RC3
+  * Spanish, Portuguese, French, Italian, German, Dutch translations updated
+  * Windows, Mac: JRE update (1.8.0_102 -> 1.8.0_121)
+  * BitSnoop search removed
+	
+ -- FrostWire Team <contact@frostwire.com>  Wed, 05 Apr 2017 04:20:00 -0600
+
+frostwire (6.4.6) stable; urgency=high
+  * New Options > Advanced > Experimental. Users can now try ALPHA and BETA features
+    at their own risk.
+  * New revision of jlibtorrent 1.2.0.6 fixes BitTorrent bugs
+  * New piece size selection on torrent creation dialog
+  * Library > Playlists UI improvements. Support to display lyrics when available
+  * BTJunkie.eu search discontinued
+  * Fixes issues with SoundCloud search
+  * FrostWire wizard is now displayed when a new build number is detected
+  * jlibtorrent version number available in about window
+  * ALPHA: New VPN-Drop protection setting. Automatically stop all BitTorrent traffic
     if no VPN connection is available
+	
+ -- FrostWire Team <contact@frostwire.com>  Tue, 7 Mar 2017 19:45:51 -0600
+	
+frostwire (6.4.5) stable; urgency=high
   * New jlibtorrent 1.2.0.6 fixes BitTorrent connectivity issues
 
  -- FrostWire Team <contact@frostwire.com>  Mon, 13 Feb 2017 10:18:02 -0600

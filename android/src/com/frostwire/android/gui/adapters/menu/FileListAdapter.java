@@ -38,7 +38,13 @@ import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.adapters.menu.FileListAdapter.FileDescriptorItem;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.util.UIUtils;
-import com.frostwire.android.gui.views.*;
+import com.frostwire.android.gui.views.AbstractListAdapter;
+import com.frostwire.android.gui.views.BrowseThumbnailImageButton;
+import com.frostwire.android.gui.views.ListAdapterFilter;
+import com.frostwire.android.gui.views.MediaPlaybackOverlay;
+import com.frostwire.android.gui.views.MenuAction;
+import com.frostwire.android.gui.views.MenuAdapter;
+import com.frostwire.android.gui.views.MenuBuilder;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
 import com.frostwire.bittorrent.BTEngine;
@@ -50,7 +56,13 @@ import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -71,6 +83,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     protected FileListAdapter(Context context, List<FileDescriptor> files, byte fileType) {
         super(context, R.layout.view_browse_thumbnail_peer_list_item, convertFiles(files));
         setShowMenuOnClick(true);
+        setShowMenuOnLongClick(false);
 
         FileListFilter fileListFilter = new FileListFilter();
         setAdapterFilter(fileListFilter);
@@ -121,7 +134,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         List<FileDescriptor> checked = convertItems(getChecked());
-        ensureCorrectMimeType(fd);
         boolean canOpenFile = fd.mime != null && (fd.mime.contains("audio") || fd.mime.contains("bittorrent") || fd.filePath != null);
         int numChecked = checked.size();
 
@@ -177,7 +189,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS &&
-                fd.fileType != Constants.FILE_TYPE_RINGTONES) {
+            fd.fileType != Constants.FILE_TYPE_RINGTONES) {
             items.add(new SendFileMenuAction(context, fd));
             items.add(new DeleteFileMenuAction(context, this, list));
         }
@@ -195,9 +207,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
         onLocalPlay();
         Context ctx = getContext();
-
-        ensureCorrectMimeType(fd);
-
         if (fd.mime != null && fd.mime.contains("audio")) {
             if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
                 Engine.instance().getMediaPlayer().stop();
@@ -216,7 +225,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 if (fd.fileType == Constants.FILE_TYPE_RINGTONES) {
                     playRingtone(fd);
                 } else {
-                    UIUtils.openFile(ctx, fd.filePath, fd.mime);
+                    UIUtils.openFile(ctx, fd.filePath, fd.mime, true);
                 }
             } else {
                 // it will automatically remove the 'Open' entry.
@@ -233,15 +242,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
         MusicUtils.playSimple(fileDescriptor.filePath);
         notifyDataSetChanged();
-    }
-
-    private void ensureCorrectMimeType(FileDescriptor fd) {
-        if (fd.filePath.endsWith(".apk")) {
-            fd.mime = Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE;
-        }
-        if (fd.filePath.endsWith(".torrent")) {
-            fd.mime = Constants.MIME_TYPE_BITTORRENT;
-        }
     }
 
     private void populateViewThumbnail(View view, FileDescriptorItem item) {
@@ -364,7 +364,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
         title.setTextColor(res.getColor(R.color.app_text_primary));
         text.setTextColor(res.getColor(R.color.app_text_primary));
-        size.setTextColor(res.getColor(R.color.basic_blue_darker_highlight));
+        size.setTextColor(res.getColor(R.color.basic_blue_highlight_dark));
     }
 
     private void setInactiveTextColors(View v) {
@@ -497,7 +497,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         return false;
     }
 
-    private static String readInfoFromTorrent(String torrent, boolean magnet) {
+    public static String readInfoFromTorrent(String torrent, boolean magnet) {
         if (torrent == null) {
             return "";
         }

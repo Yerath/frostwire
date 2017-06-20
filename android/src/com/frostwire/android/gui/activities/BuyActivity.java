@@ -137,6 +137,7 @@ public final class BuyActivity extends AbstractActivity {
     public void onBackPressed() {
         if (isInterstitial()) {
             onInterstitialActionBarDismiss();
+            finish();
         } else {
             finish();
         }

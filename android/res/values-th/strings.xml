@@ -46,7 +46,7 @@
     <string name="activity_uploads_title_text">อัปโหลด</string>
     <string name="torrent_max_peers">ทำเนียบแม็กซ์</string>
     <string name="request_again">ขออีกครั้ง</string>
-    <string name="use_mininova">ใช้ Mininova.org</string>
+    <string name="use_zooqle">ใช้ Zooqle.comg</string>
     <string name="restarting_summary">FrostWire จะเริ่มต้นใหม่ในขณะนี้สำหรับสิทธิ์อนุญาตให้มีผลบังคับใช้</string>
     <string name="clear_search_cache">แคชล้างการค้นหา</string>
     <string name="unshare">ยกเลิกการแบ่งปัน</string>
@@ -88,7 +88,6 @@
     <string name="send_to_chat">Send to Chat</string>
     <string name="delete_this_track">ลบงานชิ้นนี้</string>
     <string name="five_dollars">$5</string>
-    <string name="use_isohunt">ใช้ ISOHunt.com</string>
     <string name="loading_indeterminate">กำลังโหลด…</string>
     <string name="nickname_hint">ชื่อเล่น</string>
     <string name="transfer_status_demuxing">Demuxing</string>
@@ -161,7 +160,6 @@
     <string name="love_frostwire">รัก FrostWire</string>
     <string name="wifi_networks_only_summary">บันทึกข้อมูล. ดาวน์โหลดเฉพาะหากการเชื่อมต่อ Wi-Fi จะจัดตั้งขึ้น</string>
     <string name="or_enter_url">หรือป้อน URL</string>
-    <string name="use_vertor">ใช้ Vertor.com</string>
     <string name="azureus_manager_item_initializing">การเริ่มต้น</string>
     <string name="documents">เอกสาร</string>
     <string name="fetching_file_list">รายการดึงข้อมูลที่ใช้ร่วมกัน</string>
@@ -225,19 +223,16 @@
     <string name="one_year">1 ปี</string>
     <string name="transfers_select_completed">เสร็จ</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">หยุดชั่วคราว/หยุดการถ่ายโอนทั้งหมด</string>
-    <string name="use_kat_summary">KAT เป็นแม่เหล็กที่ใช้งานได้เฉพาะใน WiFi</string>
     <string name="sharing_num_files">ใช้งานร่วมกัน %1$s ไฟล์ประเภท %2$s</string>
     <string name="cancel_transfer">ยกเลิกการโอน</string>
     <string name="support_frostwire">FrostWire สนับสนุน</string>
     <string name="wifi_sharing">Wi-Fi ที่ใช้ร่วมกัน</string>
-    <string name="use_clearbits">ใช้ ClearBits.net</string>
     <string name="torrent_max_total_connections_summary">การเชื่อมต่อสูงสุดรวม</string>
     <string name="toast_on_disconnect">ตัดการเชื่อมต่อจาก BitTorrent ทั้งหมดการโอน BitTorrent ได้หยุด</string>
     <string name="transfers_select_downloading">ดาวน์โหลด</string>
     <string name="clear_torrent_index_summary">ล้างดัชนี Torrent</string>
     <string name="frostwire_features">FROSTWIRE คุณสมบัติ</string>
     <string name="free_apps">แอปฟรี</string>
-    <string name="send_to_third_party">ส่ง/อัปโหลด</string>
     <string name="support_free_software">สนับสนุนซอฟต์แวร์ฟรี</string>
     <string name="send_my_geo_location_summary">ปิงจะส่งตำแหน่งทางภูมิศาสตร์โดยประมาณของคุณที่จะหาเพื่อนที่อยู่ใกล้</string>
     <string name="wants_to_share_a_file">ต้องการแบ่งปันไฟล์</string>
@@ -391,7 +386,6 @@
     <string name="vpn_client_feature_1">การเข้ารหัสทหารชั้น</string>
     <string name="transfers_context_resume_all_torrent_transfers">การถ่ายโอนงานทั้งหมดฝนตกหนัก</string>
     <string name="vpn_client_feature_3">ภาคเอกชนและการเรียกดู logless</string>
-    <string name="use_bitsnoop">ใช้ BitSnoop</string>
     <string name="free_download">ดาวน์โหลดฟรี</string>
     <string name="internet_discovery_summary">เชื่อมต่อไปยังเพื่อนที่ห่างไกลบนอินเทอร์เน็ต</string>
     <string name="couldnt_share_file">ไม่สามารถแชร์ไฟล์ เส้นทางแปลกพบ</string>
@@ -513,7 +507,6 @@
     <string name="error_not_enough_peers">ลองเพื่อนอีกครั้งไม่เพียงพอ</string>
     <string name="seed_finished_torrents_summary">แบ่งปันชิ้นส่วนของการดาวน์โหลดฝนตกหนักกับใครบนอินเทอร์เน็ตผ่านทาง BitTorrent</string>
     <string name="support_frostwire_summary">แสดงโฆษณาเพื่อสนับสนุนการพัฒนาของ app นี้</string>
-    <string name="use_kat">ใช้ KAT</string>
     <string name="back">กลับ</string>
     <string name="searchable_activity_label">กิจกรรมที่สามารถค้นหาได้</string>
     <string name="visit_vpn_client">เยี่ยม ExpressVPN</string>
@@ -567,7 +560,7 @@
     <string name="torrent_max_uploads_summary">แม็กซ์อัปโหลด</string>
     <string name="activity_about">เกี่ยวกับ</string>
     <string name="try_other_keywords">ลองใช้คำหลักน้อยลง/ที่แตกต่างกัน</string>
-    <string name="use_upnp_port_mapping_summary">ลองกดที่นี่เพื่อตั้งหมายเลขพอร์ตคู่มือการใช้งาน...</string>
+    <string name="use_upnp_port_mapping_summary">ลองกดที่นี่เพื่อตั้งหมายเลขพอร์ตคู่มือการใช้งาน…</string>
     <string name="activity_media_player_image_description">ภาพสื่อ</string>
     <string name="donate_1">บริจาค $1</string>
     <string name="donate_5">บริจาค $5</string>
@@ -607,7 +600,6 @@
     <string name="are_you_sure">คุณแน่ใจไหม?</string>
     <string name="application">ใบสมัคร</string>
     <string name="update_title">อัพเดทเวลา!</string>
-    <string name="use_btjunkie">ใช้ BTJunkie</string>
     <string name="peer_http_download_status_downloading">ดาวน์โหลด</string>
     <string name="picture">ภาพ</string>
     <string name="files_shared">ไฟล์ที่ใช้ร่วมกัน</string>
@@ -623,6 +615,32 @@
     <string name="remove_ads">ลบโฆษณา</string>
     <string name="your_connection_has_dropped_stopping_services">การเชื่อมต่อไร้สายของคุณได้ลดลง หยุดให้บริการ</string>
     <string name="use_tpb_summary">TPB เป็นแม่เหล็กที่ใช้งานได้เฉพาะใน WiFi</string>
-
-
+    <string name="cloud_download_aborted_on_mobile_data">การตั้งค่าปัจจุบันจะช่วยป้องกันการดาวน์โหลดเมื่อไม่ได้อยู่บนเครือข่ายไร้สาย</string>
+    <string name="sharing_privacy_settings">ร่วมกันและความเป็นส่วนตัว</string>
+    <string name="delete_started_torrents_summary">ลบไฟล์ .torrent หลังจากที่เริ่มต้นการดาวน์โหลด</string>
+    <string name="dismiss">ยกเลิก</string>
+    <string name="torrent_preferences_header">การตั้งค่า Torrent</string>
+    <string name="search_preferences_one_engine_checked_always">โดยค่าเริ่มต้นเครื่องมือค้นหาหนึ่งจะต้องมีการตรวจสอบทุกครั้ง</string>
+    <string name="switch_off_engine_without_vpn">VPN ไม่ได้ใช้งานหยุดเครื่องยนต์ BitTorrent</string>
+    <string name="notification_other_header">การแจ้งเตือนและอื่น ๆ</string>
+    <string name="number_picker_tip">เคล็ดลับ: สัมผัสหมายเลขที่เลือกใช้แป้นพิมพ์</string>
+    <string name="search_torrent_settings">การค้นหาและการตั้งค่า Torrent</string>
+    <string name="general_settings">ทั่วไป</string>
+    <string name="pro">PRO</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">ไม่มี WiFi ใช้ได้การถ่ายโอนทั้งหมดได้ถูกหยุด</string>
+    <string name="vpn_drop_protection_title">คุ้มครอง VPN ไม่ได้ใช้งาน</string>
+    <string name="deselect_all">ยกเลิกการเลือกทั้งหมด</string>
+    <string name="data_saving_kill_http_warning">นี้จะหยุดการถ่ายโอนยังไม่เสร็จทั้งหมดในความคืบหน้า</string>
+    <string name="delete_started_torrents">ลบไฟล์ .torrent</string>
+    <string name="search_header">ค้นหา</string>
+    <string name="bandwidth_usage_settings">การใช้แบนด์วิธ</string>
+    <string name="unlimited">ไม่ จำกัด</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">ตามการตั้งค่าของคุณฉันไม่สามารถเริ่มต้นการเพาะถ้าคุณเป็น Wi-Fi เนื่องจากเงินฝากออมทรัพย์ข้อมูล ไฟล์ที่จะพร้อมสำหรับการเพาะโดยอัตโนมัติเมื่อคุณได้รับกลับไปอินเทอร์เน็ตเปิดการใช้งานเครือข่าย Wi-Fi</string>
+    <string name="vpn_drop_protection_summary">ปกป้องความเป็นส่วนตัวของคุณ ปิดการใช้งานการถ่ายโอน BitTorrent โดยอัตโนมัติเว้นแต่จะมีการเชื่อมต่อ VPN เข้ารหัสการใช้งาน</string>
+    <string name="cannot_start_engine_without_vpn">BitTorrent จะไม่เริ่มต้นเว้นแต่ VPN สามารถใช้ได้ (ตรวจสอบการตั้งค่าของคุณ)</string>
+    <string name="use_magnet_summary">ขึ้นอยู่กับการเชื่อมโยงแม่เหล็กทำงานเฉพาะใน Wifi</string>
+    <string name="mobile_data_saving">การบันทึกข้อมูลมือถือ</string>
+    <string name="data_saving_kill_http_warning_title">คำเตือน: http โอนในความคืบหน้า</string>
+    <string name="fullscreen">เต็มจอ</string>
 </resources>

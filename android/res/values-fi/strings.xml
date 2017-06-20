@@ -46,7 +46,7 @@
     <string name="activity_uploads_title_text">Ladatut</string>
     <string name="torrent_max_peers">Max Peers</string>
     <string name="request_again">Pyydä Jälleen</string>
-    <string name="use_mininova">Käytä Mininova.org</string>
+    <string name="use_zooqle">Käytä Zooqle.com</string>
     <string name="restarting_summary">FrostWire käynnistyy nyt itsestäänselvyytenä oikeudet otetaan käyttöön</string>
     <string name="clear_search_cache">Tyhjennä haku välimuisti</string>
     <string name="unshare">Unshare</string>
@@ -89,7 +89,6 @@
     <string name="send_to_chat">Lähetä Chat</string>
     <string name="delete_this_track">Poista tämä kappale</string>
     <string name="five_dollars">$5</string>
-    <string name="use_isohunt">Käytä ISOHunt.com</string>
     <string name="loading_indeterminate">Ladataan…</string>
     <string name="nickname_hint">Lempinimi</string>
     <string name="transfer_status_demuxing">Demuxing</string>
@@ -163,7 +162,6 @@
     <string name="love_frostwire">Rakkaus FrostWire</string>
     <string name="wifi_networks_only_summary">Tallenna. Lataa vain jos Wi-Fi-yhteys on muodostettu. </string>
     <string name="or_enter_url">tai anna URL</string>
-    <string name="use_vertor">Käytä Vertor.com</string>
     <string name="azureus_manager_item_initializing">Alustetaan</string>
     <string name="documents">Dokumentit</string>
     <string name="fetching_file_list">Haetaan lista jaetuista</string>
@@ -229,19 +227,16 @@
     <string name="one_year">1 vuosi</string>
     <string name="transfers_select_completed">valmistunut</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">Tauko/Lopeta kaikki siirrot</string>
-    <string name="use_kat_summary">KAT on magneetti pohjainen, toimii vain Wifi</string>
     <string name="sharing_num_files">Jakaminen %1$s tiedostotyyppi %2$s</string>
     <string name="cancel_transfer">Peruuta siirto</string>
     <string name="support_frostwire">Tuki FrostWire</string>
     <string name="wifi_sharing">Wi-Fi jakaminen</string>
-    <string name="use_clearbits">Käytä ClearBits.net</string>
     <string name="torrent_max_total_connections_summary">Maksimiteho Liitännät</string>
     <string name="toast_on_disconnect">Irrotettu BitTorrent. Kaikki BitTorrent siirrot ovat pysähtyneet.</string>
     <string name="transfers_select_downloading">lataaminen</string>
     <string name="clear_torrent_index_summary">Clear Torrent Index</string>
     <string name="frostwire_features">FROSTWIRE ESITTELEE</string>
     <string name="free_apps">Ilmaiset sovellukset</string>
-    <string name="send_to_third_party">Lähetä/Lataa</string>
     <string name="support_free_software">Tukea ilmainen ohjelmisto</string>
     <string name="send_my_geo_location_summary">Ping lähettää arvioidun maantieteellisen sijainnin löytää lähimmän ikäisensä.</string>
     <string name="wants_to_share_a_file">haluaa jakaa tiedoston</string>
@@ -397,7 +392,6 @@
     <string name="vpn_client_feature_1">Military-salausta</string>
     <string name="transfers_context_resume_all_torrent_transfers">Jatka kaikki torrent siirrot</string>
     <string name="vpn_client_feature_3">Yksityiset ja logless selailu</string>
-    <string name="use_bitsnoop">Käytä BitSnoop</string>
     <string name="free_download">Ilmainen lataus</string>
     <string name="internet_discovery_summary">Yhdistä kauko ikäisensä Internetissä.</string>
     <string name="couldnt_share_file">Ei voitu jakaa tiedoston. Outo polku löytyy.</string>
@@ -521,7 +515,6 @@
     <string name="error_not_enough_peers">Yritä uudelleen, ei riitä ikäisensä</string>
     <string name="seed_finished_torrents_summary">Jaa kappaletta torrent lataukset ketään internetiin BitTorrent</string>
     <string name="support_frostwire_summary">Näytä mainoksia tukemaan tämän sovelluksen.</string>
-    <string name="use_kat">Käytä KAT</string>
     <string name="back">Takaisin</string>
     <string name="searchable_activity_label">Haettavat aktiivisuus</string>
     <string name="visit_vpn_client">Käy ExpressVPN</string>
@@ -615,7 +608,6 @@
     <string name="are_you_sure">Oletko varma?</string>
     <string name="application">Sovellus</string>
     <string name="update_title">Päivitä aika!</string>
-    <string name="use_btjunkie">Käytä BTJunkie</string>
     <string name="peer_http_download_status_downloading">Lataaminen</string>
     <string name="picture">Kuva</string>
     <string name="files_shared">jakamia tiedostoja</string>
@@ -631,4 +623,24 @@
     <string name="remove_ads">Poista mainokset</string>
     <string name="your_connection_has_dropped_stopping_services">WiFi-yhteys on laskenut. Pysäyttäminen palvelut.</string>
     <string name="use_tpb_summary">TPB on magneetti pohjainen, toimii vain Wifi</string>
+    <string name="cloud_download_aborted_on_mobile_data">Nykyinen asetus estää lataaminen kun ei WiFi-verkossa</string>
+    <string name="delete_started_torrents_summary">Poista .torrent-tiedostoja jälkeen alkaa lataamisen</string>
+    <string name="dismiss">Hylkää</string>
+    <string name="search_preferences_one_engine_checked_always">Oletuksena yksi hakukone on tarkistettava aina</string>
+    <string name="switch_off_engine_without_vpn">VPN on aktiivinen, pysäytetään BitTorrent moottori.</string>
+    <string name="number_picker_tip">Vihje: touch valittu numero käyttää näppäimistöä</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">Ei WiFi, kaikki siirrot on lopetettu</string>
+    <string name="vpn_drop_protection_title">VPN Valvontatoiminto ei ole käytössä</string>
+    <string name="deselect_all">Poista kaikki valinnat</string>
+    <string name="data_saving_kill_http_warning">Tämä pysäyttää kaikki keskeneräiset siirrot käynnissä</string>
+    <string name="delete_started_torrents">Poista .torrent-tiedostoja</string>
+    <string name="unlimited">Rajoittamaton</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">Mukaan asetukset En voi aloittaa kylvö ellet ovat Wi-Fi vuoksi tietojen säästöjä. Tiedosto on valmis kylvö automaattisesti kun saat takaisin internet käytössä Wi-Fi-verkkoon.</string>
+    <string name="vpn_drop_protection_summary">Yksityisyyden suojaamiseksi. Automaattisesti poistaa BitTorrent siirtoja ellei salatun VPN-yhteys on aktiivinen</string>
+    <string name="cannot_start_engine_without_vpn">BitTorrent ei käynnisty, ellei VPN on saatavilla. (Tarkista asetukset)</string>
+    <string name="use_magnet_summary">Magnet pohjainen, toimii vain Wifi</string>
+    <string name="mobile_data_saving">Mobiilitiedonsiirto säästö</string>
+    <string name="data_saving_kill_http_warning_title">Varoitus: Http siirrot käynnissä</string>
+    <string name="fullscreen">koko näyttö</string>
 </resources>

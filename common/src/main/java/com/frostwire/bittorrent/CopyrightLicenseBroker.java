@@ -162,7 +162,7 @@ public class CopyrightLicenseBroker implements Mappable<String, Map<String, Stri
     }
 
     public String getLicenseName() {
-        return license.getName();
+        return license != null ? license.getName() : null;
     }
 
     private static boolean isInvalidLicense(String licenseStr) {

@@ -46,7 +46,7 @@
     <string name="activity_uploads_title_text">Opplastede</string>
     <string name="torrent_max_peers">Maks Peers</string>
     <string name="request_again">Forespørselen på nytt</string>
-    <string name="use_mininova">Bruk Mininova.org</string>
+    <string name="use_zooqle">Bruk Zooqle.com</string>
     <string name="restarting_summary">Frostwire vil starte på nytt nå for gitt tillatelser til å tre i kraft</string>
     <string name="clear_search_cache">Tøm søke cache</string>
     <string name="unshare">Opphev deling</string>
@@ -89,7 +89,6 @@
     <string name="send_to_chat">Send til Chat</string>
     <string name="delete_this_track">Slett dette stykket</string>
     <string name="five_dollars">$5</string>
-    <string name="use_isohunt">Bruk ISOHunt.com</string>
     <string name="loading_indeterminate">Laster…</string>
     <string name="nickname_hint">Kallenavn</string>
     <string name="transfer_status_demuxing">Demuxing</string>
@@ -163,7 +162,6 @@
     <string name="love_frostwire">Elsker Frostwire</string>
     <string name="wifi_networks_only_summary">Lagre data. Last ned bare hvis Wi-Fi-forbindelse er etablert. </string>
     <string name="or_enter_url">eller skriv inn URL</string>
-    <string name="use_vertor">Bruk Vertor.com</string>
     <string name="azureus_manager_item_initializing">Initial</string>
     <string name="documents">Dokumenter</string>
     <string name="fetching_file_list">Henter liste over delte</string>
@@ -229,19 +227,16 @@
     <string name="one_year">1 år</string>
     <string name="transfers_select_completed">fullført</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">Pause/Stopp alle overføringer</string>
-    <string name="use_kat_summary">KAT er magnet basert, fungerer bare på Wifi</string>
     <string name="sharing_num_files">Deling %1$s filer av typen %2$s</string>
     <string name="cancel_transfer">Avbryt overføring</string>
     <string name="support_frostwire">Støtte Frostwire</string>
     <string name="wifi_sharing">Wi-Fi-deling</string>
-    <string name="use_clearbits">Bruk ClearBits.net</string>
     <string name="torrent_max_total_connections_summary">Max Totalt Tilkoblinger</string>
     <string name="toast_on_disconnect">Koblet fra BitTorrent. Alle BitTorrent overføringer har stoppet.</string>
     <string name="transfers_select_downloading">nedlasting</string>
     <string name="clear_torrent_index_summary">Clear Torrent Index</string>
     <string name="frostwire_features">FROSTWIRE SøKelyS</string>
     <string name="free_apps">Gratis Apps</string>
-    <string name="send_to_third_party">Send/Last opp</string>
     <string name="support_free_software">Støtte fri programvare</string>
     <string name="send_my_geo_location_summary">Pings vil sende den omtrent geolocation å finne nærmeste kolleger.</string>
     <string name="wants_to_share_a_file">ønsker å dele en fil</string>
@@ -397,7 +392,6 @@
     <string name="vpn_client_feature_1">Militær-grade kryptering</string>
     <string name="transfers_context_resume_all_torrent_transfers">Gjenoppta alle torrent overføringer</string>
     <string name="vpn_client_feature_3">Private og logless surfing</string>
-    <string name="use_bitsnoop">Bruk BitSnoop</string>
     <string name="free_download">Gratis nedlasting</string>
     <string name="internet_discovery_summary">Koble til eksterne jevnaldrende på Internett.</string>
     <string name="couldnt_share_file">Kunne ikke dele filen. Weird banen funnet.</string>
@@ -521,7 +515,6 @@
     <string name="error_not_enough_peers">Prøv igjen, ikke nok jevnaldrende</string>
     <string name="seed_finished_torrents_summary">Del biter av torrent nedlastinger med noen på internett via BitTorrent</string>
     <string name="support_frostwire_summary">Vis annonser for å støtte utviklingen av dette programmet.</string>
-    <string name="use_kat">Bruk KAT</string>
     <string name="back">Tilbake</string>
     <string name="searchable_activity_label">Søkbar aktivitet</string>
     <string name="visit_vpn_client">Besøk ExpressVPN</string>
@@ -615,7 +608,6 @@
     <string name="are_you_sure">Er du sikker?</string>
     <string name="application">Applikasjonsprogramvare</string>
     <string name="update_title">Oppdater tid!</string>
-    <string name="use_btjunkie">Bruk BTJunkie</string>
     <string name="peer_http_download_status_downloading">Nedlasting</string>
     <string name="picture">Bilde</string>
     <string name="files_shared">filer som deles</string>
@@ -631,4 +623,24 @@
     <string name="remove_ads">Fjern annonser</string>
     <string name="your_connection_has_dropped_stopping_services">Din WiFi-tilkobling har falt. Stoppe tjenester.</string>
     <string name="use_tpb_summary">TPB er magnet basert, fungerer bare på Wifi</string>
+    <string name="cloud_download_aborted_on_mobile_data">Aktuell innstilling forhindrer nedlasting når den ikke er på Wifi-nettverk</string>
+    <string name="delete_started_torrents_summary">Slett .torrent filer etter begynner å laste ned</string>
+    <string name="dismiss">Avskjedige</string>
+    <string name="search_preferences_one_engine_checked_always">Som standard, trenger en søkemotor som skal kontrolleres til enhver tid</string>
+    <string name="switch_off_engine_without_vpn">VPN er inaktiv, stoppe BitTorrent motoren.</string>
+    <string name="number_picker_tip">Tips: Trykk valgte nummeret å bruke tastaturet</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">Ingen Wifi tilgjengelig, har alle overføringer er stoppet</string>
+    <string name="vpn_drop_protection_title">VPN beskyttelse er inaktiv</string>
+    <string name="deselect_all">Opphev alle</string>
+    <string name="data_saving_kill_http_warning">Dette vil stoppe alle uferdige overføringer i fremgang</string>
+    <string name="delete_started_torrents">Slett .torrent-filer</string>
+    <string name="unlimited">Ubegrenset</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">Henhold til innstillingene dine Jeg kan ikke starte seeding med mindre du er på Wi-Fi på grunn av data besparelser. Filen vil være klar for såing automatisk når du kommer tilbake til en Internett-aktivert Wi-Fi-nettverk.</string>
+    <string name="vpn_drop_protection_summary">Beskytt ditt privatliv. Automatisk deaktivere BitTorrent overføringer med mindre en kryptert VPN-tilkobling er aktiv</string>
+    <string name="cannot_start_engine_without_vpn">BitTorrent vil ikke starte uten en VPN er tilgjengelig. (Sjekk innstillingene)</string>
+    <string name="use_magnet_summary">Basert på magnet linker, fungerer bare på Wifi</string>
+    <string name="mobile_data_saving">Mobildata vises Lagre</string>
+    <string name="data_saving_kill_http_warning_title">Advarsel: Http overføringer i fremgang</string>
+    <string name="fullscreen">full skjerm</string>
 </resources>

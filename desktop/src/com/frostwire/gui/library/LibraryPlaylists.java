@@ -330,8 +330,7 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
                 playlist.refresh();
             }
             LibraryMediator.instance().updateTableItems(playlist);
-            String status = LibraryUtils.getPlaylistDurationInDDHHMMSS(playlist) + ", " + playlist.getItems().size() + " " + I18n.tr("tracks");
-            LibraryMediator.instance().getLibrarySearch().setStatus(status);
+            LibraryMediator.instance().getLibrarySearch().setStatus("");
         }
         executePendingRunnables();
     }
@@ -402,6 +401,7 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
         list.repaint();
         textName.setVisible(false);
         UXStats.instance().log(UXAction.LIBRARY_PLAYLIST_RENAMED);
+        LibraryPlaylistsTableMediator.instance().updateTableItems(selectedPlaylist);
     }
 
     private void createNewPlaylist() {

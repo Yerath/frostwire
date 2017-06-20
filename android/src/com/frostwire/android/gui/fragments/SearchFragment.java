@@ -151,7 +151,7 @@ public final class SearchFragment extends AbstractFragment implements
     @Override
     public View getHeader(Activity activity) {
         LayoutInflater inflater = LayoutInflater.from(activity);
-        @SuppressLint("InflateParams") TextView header = (TextView) inflater.inflate(R.layout.view_main_fragment_simple_header, null);
+        TextView header = (TextView) inflater.inflate(R.layout.view_main_fragment_simple_header, null, false);
         header.setText(R.string.search);
         header.setOnClickListener(new OnClickListener() {
             private int clickCount = 0;
@@ -160,7 +160,7 @@ public final class SearchFragment extends AbstractFragment implements
                 clickCount++;
                 LOG.info("header.onClick() - clickCount => " + clickCount);
                 if (clickCount % 5 == 0) {
-                    Offers.showInterstitial(getActivity(), Offers.PLACEMENT_INTERSTITIAL_TRANSFERS, false, false);
+                    Offers.showInterstitial(getActivity(), Offers.PLACEMENT_INTERSTITIAL_EXIT, false, false);
                 }
             }
         });

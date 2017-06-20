@@ -20,9 +20,14 @@ package com.frostwire.android.gui.views;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,7 @@ import android.widget.FrameLayout;
 
 import com.frostwire.android.R;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,10 +52,11 @@ public abstract class AbstractActivity extends AppCompatActivity {
     private boolean paused;
     private View toolbarView;
 
+    private static boolean menuIconsVisible = false;
+
     public AbstractActivity(int layoutResId) {
         this.layoutResId = layoutResId;
         this.fragmentTags = new ArrayList<>();
-
         this.paused = false;
     }
 
@@ -96,7 +103,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(layoutResId);
         initComponents(savedInstanceState);
         setToolbar();
@@ -120,6 +126,25 @@ public abstract class AbstractActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean r = super.onCreateOptionsMenu(menu);
+        setMenuIconsVisible(menu);
+        return r;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        setMenuIconsVisible(menu);
+    }
+
+    @Nullable
+    @Override
+    public ActionMode startSupportActionMode(@NonNull ActionMode.Callback callback) {
+        return super.startSupportActionMode(new ActionModeCallback(callback));
     }
 
     protected void initComponents(Bundle savedInstanceState) {
@@ -154,7 +179,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
         toolbarView = view;
         if (toolbarView != null && placeholder != null) {
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = gravity;
             placeholder.addView(toolbarView, params);
@@ -163,6 +188,84 @@ public abstract class AbstractActivity extends AppCompatActivity {
     }
 
     protected final void setToolbarView(View view) {
-        setToolbarView(view, Gravity.LEFT | Gravity.CENTER_VERTICAL);
+        setToolbarView(view, Gravity.START | Gravity.CENTER_VERTICAL);
+    }
+
+    /**
+     * This settings is application wide and apply to all activities and
+     * fragments that use our internal abstract activity. This enable
+     * or disable the menu icons for both options and context menu.
+     *
+     * @param visible if icons are visible or not
+     */
+    public static void setMenuIconsVisible(boolean visible) {
+        menuIconsVisible = visible;
+    }
+
+    private static void setMenuIconsVisible(Menu menu) {
+        if (menu == null) { // in case the framework changes
+            return;
+        }
+
+        // android by default set the field to false
+        if (!menuIconsVisible) {
+            return; // quick return
+        }
+
+        Class<?> clazz = menu.getClass();
+        Field f = null;
+        while (clazz != null && f == null) {
+            try {
+                f = clazz.getDeclaredField("mOptionalIconsVisible");
+            } catch (Throwable e) {
+                // next, no need to get them all, balanced cost of exception
+            }
+            clazz = clazz.getSuperclass();
+        }
+
+        if (f == null) {
+            // the menu framework changed, nothing we can do, but visual
+            // will reveal that a fix is necessary
+            return;
+        }
+
+        try {
+            f.setAccessible(true);
+            f.set(menu, menuIconsVisible);
+        } catch (Throwable e) {
+            // ignore, unable to set icons for the menu, but visual
+            // will reveal that a fix is necessary
+        }
+    }
+
+    private static final class ActionModeCallback implements ActionMode.Callback {
+
+        private ActionMode.Callback cb;
+
+        private ActionModeCallback(ActionMode.Callback cb) {
+            this.cb = cb;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            boolean r = cb.onCreateActionMode(mode, menu);
+            setMenuIconsVisible(menu);
+            return r;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return cb.onPrepareActionMode(mode, menu);
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return cb.onActionItemClicked(mode, item);
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            cb.onDestroyActionMode(mode);
+        }
     }
 }

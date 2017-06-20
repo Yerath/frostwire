@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -45,6 +45,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.andrew.apollo.utils.MusicUtils;
+import com.frostwire.android.BuildConfig;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -324,12 +325,15 @@ public final class UIUtils {
      * Opens the given file with the default Android activity for that File and
      * mime type.
      */
-    public static void openFile(Context context, String filePath, String mime) {
+    public static void openFile(Context context, String filePath, String mime, boolean useFileProvider) {
         try {
             if (filePath != null && !openAudioInternal(filePath)) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setDataAndType(Uri.fromFile(new File(filePath)), mime);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = useFileProvider ?
+                        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", new File(filePath)) :
+                        Uri.fromFile(new File(filePath));
+                i.setDataAndType(uri, Intent.normalizeMimeType(mime));
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 if (mime != null && mime.contains("video")) {
                     if (MusicUtils.isPlaying()) {
@@ -337,7 +341,6 @@ public final class UIUtils {
                     }
                     UXStats.instance().log(UXAction.LIBRARY_VIDEO_PLAY);
                 }
-
                 context.startActivity(i);
             }
         } catch (Throwable e) {
@@ -347,7 +350,11 @@ public final class UIUtils {
     }
 
     public static void openFile(Context context, File file) {
-        openFile(context, file.getAbsolutePath(), getMimeType(file.getAbsolutePath()));
+        openFile(context, file.getAbsolutePath(), getMimeType(file.getAbsolutePath()), true);
+    }
+
+    public static void openFile(Context context, File file, boolean useFileProvider) {
+        openFile(context, file.getAbsolutePath(), getMimeType(file.getAbsolutePath()), useFileProvider);
     }
 
     public static void openURL(Context context, String url) {
@@ -549,10 +556,6 @@ public final class UIUtils {
             }
         }
         ctx.sendBroadcast(intent);
-    }
-
-    public static boolean inUIThread() {
-        return Looper.myLooper() == Looper.getMainLooper();
     }
 
     public static int randomPitchResId(boolean avoidSupportPitches) {

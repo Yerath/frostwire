@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2016, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@
 package com.frostwire.android.gui;
 
 import android.os.Build;
+
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.search.SearchPerformer;
 import com.frostwire.search.archiveorg.ArchiveorgSearchPerformer;
-import com.frostwire.search.bitsnoop.BitSnoopSearchPerformer;
-import com.frostwire.search.btjunkie.BtjunkieSearchPerformer;
 import com.frostwire.search.extratorrent.ExtratorrentSearchPerformer;
 import com.frostwire.search.eztv.EztvSearchPerformer;
 import com.frostwire.search.frostclick.FrostClickSearchPerformer;
 import com.frostwire.search.frostclick.UserAgent;
 import com.frostwire.search.limetorrents.LimeTorrentsSearchPerformer;
-import com.frostwire.search.mininova.MininovaSearchPerformer;
+import com.frostwire.search.zooqle.ZooqleSearchPerformer;
 import com.frostwire.search.monova.MonovaSearchPerformer;
 import com.frostwire.search.soundcloud.SoundcloudSearchPerformer;
 import com.frostwire.search.torlock.TorLockSearchPerformer;
@@ -117,10 +116,10 @@ public abstract class SearchEngine {
         }
     };
 
-    public static final SearchEngine MININOVA = new SearchEngine("Mininova", Constants.PREF_KEY_SEARCH_USE_MININOVA) {
+    public static final SearchEngine ZOOQLE = new SearchEngine("Zooqle", Constants.PREF_KEY_SEARCH_USE_ZOOQLE) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new MininovaSearchPerformer("www.mininova.org", token, keywords, DEFAULT_TIMEOUT);
+            return new ZooqleSearchPerformer("zooqle.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
@@ -149,13 +148,6 @@ public abstract class SearchEngine {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
             return new FrostClickSearchPerformer("api.frostclick.com", token, keywords, DEFAULT_TIMEOUT, FROSTWIRE_ANDROID_USER_AGENT);
-        }
-    };
-
-    public static final SearchEngine BITSNOOP = new SearchEngine("BitSnoop", Constants.PREF_KEY_SEARCH_USE_BITSNOOP) {
-        @Override
-        public SearchPerformer getPerformer(long token, String keywords) {
-            return new BitSnoopSearchPerformer("bitsnoop.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
@@ -205,7 +197,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             MonovaSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new MonovaSearchPerformer("www.monova.org", token, keywords, DEFAULT_TIMEOUT);
+                performer = new MonovaSearchPerformer("monova.org", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No MonovaSearchPerformer, WiFi not up");
             }
@@ -226,18 +218,5 @@ public abstract class SearchEngine {
         }
     };
 
-    public static final SearchEngine BTJUNKIE = new SearchEngine("Btjunkie.eu", Constants.PREF_KEY_SEARCH_USE_BTJUNKIE) {
-        @Override
-        public SearchPerformer getPerformer(long token, String keywords) {
-            BtjunkieSearchPerformer performer = null;
-            if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new BtjunkieSearchPerformer("btjunkie.eu", token, keywords, DEFAULT_TIMEOUT);
-            } else {
-                LOG.info("No BtjunkieSearchPerformer, WiFi not up");
-            }
-            return performer;
-        }
-    };
-
-    private static final List<SearchEngine> ALL_ENGINES = Arrays.asList(EXTRATORRENT, YIFY, YOUTUBE, FROSTCLICK, MONOVA, MININOVA, BTJUNKIE, TPB, SOUNCLOUD, ARCHIVE, TORLOCK, TORRENTDOWNLOADS, LIMETORRENTS, BITSNOOP, EZTV);
+    private static final List<SearchEngine> ALL_ENGINES = Arrays.asList(EXTRATORRENT, YIFY, YOUTUBE, FROSTCLICK, MONOVA, ZOOQLE, TPB, SOUNCLOUD, ARCHIVE, TORLOCK, TORRENTDOWNLOADS, LIMETORRENTS, EZTV);
 }

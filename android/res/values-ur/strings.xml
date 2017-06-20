@@ -129,7 +129,7 @@
     <string name="me">مجھے</string>
     <string name="activity_uploads_title_text">اپ لوڈز</string>
     <string name="request_again">درخواست دوبارہ</string>
-    <string name="use_mininova">استعمال Mininova.org</string>
+    <string name="use_zooqle">استعمال Zooqle.com</string>
     <string name="restarting_summary">FrostWire اثر لینے کے لئے حاصل کی جاچکی اجازت کے لئے اب دوبارہ شروع کرے گا</string>
     <string name="unshare">غیر مشترک</string>
     <string name="alpha_tests_team_thanks">صبر و تحمل اور عظیم کی رائے کے لئے ہمارے تمام رضاکارانہ الفا ٹیسٹرز، کے لئے خصوصی شکریہ کے لئے شکریہ</string>
@@ -164,7 +164,6 @@
     <string name="send_to_chat">چیٹ کو بھیجیں</string>
     <string name="delete_this_track">اس ٹریک چھپانا</string>
     <string name="five_dollars">$5</string>
-    <string name="use_isohunt">استعمال ISOHunt.com</string>
     <string name="loading_indeterminate">لوڈ کر رہا ہے…</string>
     <string name="nickname_hint">عرفیت</string>
     <string name="transfer_status_demuxing">Demuxing</string>
@@ -196,7 +195,7 @@
     <string name="choose_email_app">ایک ای میل اپلی کیشن کا انتخاب کریں</string>
     <string name="failed_to_add_download">ڈاؤن شامل کرنے میں ناکام</string>
     <string name="vibrate_on_finished_download">لوڈ فارغ ہونے پر مرتعش</string>
-    <string name="my_filetype">میرا s%</string>
+    <string name="my_filetype">میرا %s</string>
     <string name="stop_all_transfers_message">یہ تمام جاری اور قطار کے ڈاؤن لوڈ منسوخ کر دیں گے. تمام منتقل ڈیٹا ضائع ہو جائے گا. کیا تمہیں یقین ہے؟</string>
     <string name="share">سیکنڈ اور</string>
     <string name="accept">قبول کریں</string>
@@ -228,7 +227,6 @@
     <string name="love_frostwire">FrostWire محبت</string>
     <string name="wifi_networks_only_summary">ڈیٹا کو محفوظ کریں. لوڈ صرف وائی فائی کنکشن قائم ہے تو.</string>
     <string name="or_enter_url">یا یو آر ایل درج کریں</string>
-    <string name="use_vertor">استعمال Vertor.com</string>
     <string name="azureus_manager_item_initializing">شروع</string>
     <string name="fetching_file_list">اشتراک کیا کی بازیابی فہرست</string>
     <string name="toast_on_connect">BitTorrent کے کور کا آغاز کیا.</string>
@@ -279,18 +277,15 @@
     <string name="one_year">1 سال</string>
     <string name="transfers_select_completed">مکمل ہو گیا</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">توقف / تمام کی منتقلی بند کرو</string>
-    <string name="use_kat_summary">KAT مقناطیس کی بنیاد پر ہے، صرف وائی فائی پر کام کرتا ہے</string>
     <string name="sharing_num_files">Sharing %1$s files of type %2$s</string>
     <string name="cancel_transfer">منتقلی منسوخ</string>
     <string name="support_frostwire">سپورٹ FrostWire</string>
-    <string name="use_clearbits">استعمال ClearBits.net</string>
     <string name="unprotected_connections_visibility_bullet_html"><![CDATA[ An unprotected connection means everything you do online (including <b>searches, messaging, and downloads</b>) may be monitored by anyone on your network and even by your Internet service provider.<br><br>We recommend using ExpressVPN to encrypt your connection and <b>safeguard your privacy</b>.]]></string>
     <string name="toast_on_disconnect">BitTorrent کے سے رابطہ منقطع ہوگیا. تمام BitTorrent کے ٹرانسفر بند کر دیا ہے.</string>
     <string name="transfers_select_downloading">ڈاؤن لوڈ کرنے</string>
     <string name="clear_torrent_index_summary">واضح نامہ انڈیکس</string>
     <string name="frostwire_features">FROSTWIRE خصوصیات</string>
     <string name="free_apps">مفت اطلاقات</string>
-    <string name="send_to_third_party">ارسال / اپ لوڈ</string>
     <string name="support_free_software">مفت سافٹ ویئر سپورٹ</string>
     <string name="send_my_geo_location_summary">پنگ کے قریب ترین ساتھیوں کو تلاش کرنے کے لئے آپ کے تخمینی جغرافیائی محل وقوع کو بھیج دیں گے.</string>
     <string name="wants_to_share_a_file">فائل کا اشتراک کرنے کے لئے چاہتا</string>
@@ -424,7 +419,6 @@
     <string name="vpn_client_feature_1">فوجی گریڈ خفیہ کاری</string>
     <string name="transfers_context_resume_all_torrent_transfers">تمام سیلاب کی منتقلی دوبارہ شروع</string>
     <string name="vpn_client_feature_3">ذاتی اور logless براؤزنگ</string>
-    <string name="use_bitsnoop">استعمال BitSnoop</string>
     <string name="free_download">مفت ڈاؤنلوڈ</string>
     <string name="internet_discovery_summary">انٹرنیٹ پر ریموٹ ساتھیوں سے منسلک ہوں.</string>
     <string name="couldnt_share_file">فائل کا اشتراک نہیں کر سکا. عجیب راستہ مل گیا.</string>
@@ -532,7 +526,6 @@
     <string name="fetching_torrent_ellipsis">نکال رہا سیلاب…</string>
     <string name="error_not_enough_peers">ایک بار پھر، یہ کافی نہیں ساتھیوں کوشش</string>
     <string name="support_frostwire_summary">اس اپلی کیشن کی ترقی کی حمایت کرنے کے لئے اشتھارات دکھائیں.</string>
-    <string name="use_kat">استعمال KAT</string>
     <string name="searchable_activity_label">تلاش سرگرمی</string>
     <string name="visit_vpn_client">ملاحظہ ExpressVPN</string>
     <string name="media_preview">%s پیش نظارہ</string>
@@ -610,7 +603,6 @@
     <string name="media_player_failed">میڈیا پلیئر میں ناکام رہے</string>
     <string name="six_months">6 ماہ</string>
     <string name="update_title">بار اپ ڈیٹ کریں!</string>
-    <string name="use_btjunkie">استعمال BTJunkie</string>
     <string name="protected_connections_visibility_bullet_html"><![CDATA[ You\'re connected to the Internet using a VPN. <br><br> If you are not already, we recommend using <b>ExpressVPN</b> to encrypt your connection and <b>safeguard your privacy</b>. ]]></string>
     <string name="files_shared">فائلوں کا اشتراک کیا</string>
     <string name="storage_picker_treeuri_not_directory">منتخب شدہ راستے کی ایک ڈائریکٹری نہیں ہے</string>
@@ -623,5 +615,32 @@
     <string name="show_love">FrostWire پسند ہے؟</string>
     <string name="remove_ads">اشتھارات ہٹا</string>
     <string name="use_tpb_summary">TPB مقناطیس کی بنیاد پر ہے، صرف وائی فائی پر کام کرتا ہے</string>
-
+    <string name="cloud_download_aborted_on_mobile_data">موجودہ ترتیب وائی فائی نیٹ ورک پر جب نہیں ڈاؤن لوڈ کرنے سے روکتا ہے</string>
+    <string name="sharing_privacy_settings">شیئرنگ اور پرائیویسی</string>
+    <string name="delete_started_torrents_summary">ڈاؤن لوڈ کرنے کے آغاز کے بعد .torrent فائلوں کو خارج کر</string>
+    <string name="dismiss">برخاست</string>
+    <string name="torrent_preferences_header">اوپر کی ترجیحات</string>
+    <string name="search_preferences_one_engine_checked_always">ڈیفالٹ کی طرف سے، ایک کی تلاش کے انجن کو ہر وقت کی جانچ پڑتال کی جائے کی ضرورت ہے</string>
+    <string name="switch_off_engine_without_vpn">VPN غیر فعال ہے. BitTorrent کے انجن روکنا.</string>
+    <string name="notification_other_header">نوٹیفیکیشن اور دیگر</string>
+    <string name="number_picker_tip">ترکیب: رابطے کے منتخب کی بورڈ کا استعمال کرنے کے لئے نمبر</string>
+    <string name="search_torrent_settings">تلاش اور نامہ ترتیبات</string>
+    <string name="general_settings">جنرل</string>
+    <string name="pro">PRO</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">آپ کوئی وائی فائی، تمام کی منتقلی کو روکا جا چکے ہیں</string>
+    <string name="vpn_drop_protection_title">VPN تحفظ غیر فعال ہے</string>
+    <string name="deselect_all">تمام غیر منتخب کریں</string>
+    <string name="data_saving_kill_http_warning">یہ ترقی میں تمام نامکمل ٹرانسفر بند ہو جائیں گے</string>
+    <string name="delete_started_torrents">.torrent فائلوں کو خارج کر</string>
+    <string name="search_header">تلاش کریں</string>
+    <string name="bandwidth_usage_settings">بینڈوڈتھ کے استعمال</string>
+    <string name="unlimited">لا محدود</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">آپ کی ترتیبات کے مطابق میں بوائ شروع نہیں کر سکتا جب تک کہ آپ کی وجہ سے اعداد و شمار کی بچت کرنے کے لئے وائی فائی پر ہیں. جب آپ کو وائی فائی نیٹ ورک چالو حالت میں ایک انٹرنیٹ کو واپس مل فائل خود کار طریقے کی بوائ کے لئے تیار ہو جائے گا.</string>
+    <string name="vpn_drop_protection_summary">آپ کی پرائیویسی کی حفاظت کرو. ایک مرموز ویپیین کنکشن فعال ہے جب تک کہ خود کار طریقے سے BitTorrent کے ٹرانسفرز کو غیر فعال</string>
+    <string name="cannot_start_engine_without_vpn"> ایک VPN دستیاب ہے جب تک کہ BitTorrent کے شروع نہیں کرے گا. (آپ کی ترتیبات چیک کریں)</string>
+    <string name="use_magnet_summary">مقناطیس لنکس بنا پر، صرف وائی فائی پر کام کرتا ہے</string>
+    <string name="mobile_data_saving">موبائل ڈیٹا کی بچت</string>
+    <string name="data_saving_kill_http_warning_title">Wانتباہ: پیش رفت میں HTTP ٹرانسفر</string>
+    <string name="fullscreen">مکمل اسکرین یا بڑی اسکرین</string>
 </resources>

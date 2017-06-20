@@ -61,6 +61,10 @@ public class LibraryUtils {
         executor = ExecutorsHelper.newProcessingQueue("LibraryUtils-Executor");
     }
 
+    public static ExecutorService getExecutor() {
+        return executor;
+    }
+
     private static void addPlaylistItem(Playlist playlist, File file) {
         addPlaylistItem(playlist, file, playlist.isStarred(), -1);
     }
@@ -461,8 +465,8 @@ public class LibraryUtils {
         }
     }
 
-    private static int addToPlaylist(Playlist playlist, File[] files, boolean starred, Set<File> ignore) {
-        return addToPlaylist(playlist, files, starred || playlist.isStarred(), -1, ignore);
+    private static void addToPlaylist(Playlist playlist, File[] files, boolean starred, Set<File> ignore) {
+        addToPlaylist(playlist, files, starred || playlist.isStarred(), -1, ignore);
     }
 
     private static int addToPlaylist(Playlist playlist, File[] files, boolean starred, int index, Set<File> ignore) {
@@ -736,5 +740,37 @@ public class LibraryUtils {
                 LibraryMediator.instance().getLibraryPlaylists().refreshSelection();
             }
         });
+    }
+
+    static void asyncParseLyrics(final TagsReader tagsReader, final OnLyricsParsedUICallback uiCallback) {
+        File audioFile = tagsReader.getFile();
+        if (audioFile == null || !audioFile.isFile() || !audioFile.canRead() || uiCallback == null) {
+            if (uiCallback != null) {
+                uiCallback.setLyrics("");
+                GUIMediator.safeInvokeLater(uiCallback);
+            }
+            return;
+        }
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                TagsData tagsData = tagsReader.parse();
+                if (tagsData != null) {
+                    uiCallback.setLyrics(tagsData.getLyrics()); // can't be null, only ""
+                    GUIMediator.safeInvokeLater(uiCallback);
+                }
+            }
+        });
+    }
+
+    public abstract static class OnLyricsParsedUICallback implements Runnable {
+        private String lyrics;
+        void setLyrics(String lyrics) {
+            this.lyrics = lyrics;
+        }
+        String getLyrics() {
+            return lyrics;
+        }
+        public abstract void run();
     }
 }

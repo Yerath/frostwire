@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/body_background_gray_light"
+    android:background="@color/app_background_body_light"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_main" />
@@ -26,7 +26,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/body_background_gray_light">
+        android:background="@color/app_background_body_light">
 
         <View
             android:id="@+id/audio_player_footer"
@@ -53,7 +53,7 @@
                 android:paddingLeft="@dimen/audio_player_header_padding_left"
                 android:paddingRight="@dimen/audio_player_header_padding_right">
 
-                <com.andrew.apollo.widgets.theme.ThemeableTextView
+                <TextView
                     android:id="@+id/audio_player_track_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,16 +61,16 @@
                     android:maxLines="1"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
-                    app:themeResource="audio_player_line_one" />
+                    android:textColor="@color/audio_player_line_one" />
 
-                <com.andrew.apollo.widgets.theme.ThemeableTextView
+                <TextView
                     android:id="@+id/audio_player_artist_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textSize="@dimen/text_size_small"
-                    app:themeResource="audio_player_line_two" />
+                    android:textColor="@color/audio_player_line_two" />
             </LinearLayout>
 
             <FrameLayout
@@ -121,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignTop="@+id/audio_player_album_art"
-                    android:background="@drawable/layout_divider_1_gray" />
+                    android:background="@drawable/divider_line" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -133,48 +133,58 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <ImageButton
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|right"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@null"
-                            android:src="@drawable/ad_cancel"
-                            android:layout_alignRight="@+id/audio_player_advertisement_text"
-                            android:visibility="invisible" />
-                        <TextView
-                            android:id="@+id/audio_player_advertisement_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1.0"
-                            android:gravity="center"
-                            android:text="@string/advertisement"
-                            android:textColor="@color/app_text_disabled"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignRight="@+id/audio_player_advertisement_text"
+                                android:layout_gravity="center_horizontal|right"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@null"
+                                android:src="@drawable/ad_cancel"
+                                android:visibility="invisible" />
+
+                            <TextView
+                                android:id="@+id/audio_player_advertisement_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1.0"
+                                android:gravity="center"
+                                android:text="@string/advertisement"
+                                android:textColor="@color/app_text_disabled"
+                                android:visibility="gone" />
+
+                            <ImageButton
+                                android:id="@+id/audio_player_dismiss_mopubview_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignRight="@+id/audio_player_advertisement_text"
+                                android:layout_gravity="center_vertical|right"
+                                android:layout_marginRight="10dp"
+                                android:background="@null"
+                                android:src="@drawable/ad_cancel"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <com.mopub.mobileads.MoPubView
+                            android:id="@+id/audio_player_mopubview"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
                             android:visibility="gone" />
 
-                        <ImageButton
-                            android:id="@+id/audio_player_dismiss_mopubview_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:layout_marginRight="10dp"
-                            android:background="@null"
-                            android:src="@drawable/ad_cancel"
-                            android:layout_alignRight="@+id/audio_player_advertisement_text"
-                            android:visibility="gone" />
-                    </LinearLayout>
-                    <com.mopub.mobileads.MoPubView
-                        android:id="@+id/audio_player_mopubview"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/audio_player_fallback_imageview"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:visibility="gone"/>
+
                         <TextView
                             android:id="@+id/audio_player_remove_ads_text_link"
                             android:layout_width="match_parent"
@@ -183,7 +193,7 @@
                             android:gravity="center"
                             android:paddingTop="20dp"
                             android:text="@string/remove_ads"
-                            android:textColor="@color/basic_blue_darker_highlight"
+                            android:textColor="@color/basic_blue_highlight_dark"
                             android:textSize="@dimen/text_medium"
                             android:textStyle="bold"
                             android:visibility="gone" />
@@ -206,13 +216,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_gravity="top"
-                    android:background="@drawable/layout_divider_1_gray" />
+                    android:background="@drawable/divider_line" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/layout_divider_1_gray" />
+                    android:background="@drawable/divider_line" />
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/audio_player_pager"
@@ -222,7 +232,7 @@
             </FrameLayout>
         </RelativeLayout>
 
-        <com.andrew.apollo.widgets.theme.ThemeableTextView
+        <TextView
             android:id="@+id/audio_player_current_time"
             android:layout_width="@dimen/audio_player_time_width"
             android:layout_height="wrap_content"
@@ -232,9 +242,9 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:textSize="@dimen/text_size_medium"
-            app:themeResource="audio_player_current_time" />
+            android:textColor="@color/audio_player_current_time" />
 
-        <com.andrew.apollo.widgets.theme.ThemeableTextView
+        <TextView
             android:id="@+id/audio_player_total_time"
             android:layout_width="@dimen/audio_player_time_width"
             android:layout_height="wrap_content"
@@ -243,9 +253,9 @@
             android:layout_alignTop="@android:id/progress"
             android:gravity="center"
             android:textSize="@dimen/text_size_medium"
-            app:themeResource="audio_player_total_time" />
+            android:textColor="@color/audio_player_total_time" />
 
-        <com.andrew.apollo.widgets.theme.ThemeableSeekBar
+        <SeekBar
             android:id="@android:id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -253,7 +263,9 @@
             android:layout_marginBottom="@dimen/audio_player_seek_bar_margin_bottom"
             android:layout_toLeftOf="@+id/audio_player_total_time"
             android:layout_toRightOf="@+id/audio_player_current_time"
-            android:max="1000" />
+            android:background="@null"
+            android:max="1000"
+            android:progressDrawable="@drawable/audio_player_seekbar" />
 
         <LinearLayout
             android:id="@+id/audio_player_controlss"
@@ -269,7 +281,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/body_background_gray_light"
+                android:background="@color/app_background_body_light"
                 android:orientation="horizontal">
 
                 <include layout="@layout/audio_player_controls" />

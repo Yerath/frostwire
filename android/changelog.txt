@@ -1,9 +1,45 @@
+FrostWire 1.9.2 - APR/20/2017
+ - New jlibtorrent 1.2.0.9-RC1
+ - New Zooqle search
+ - Monova, Torlock, YT search updates and fixes
+ - Mininova search discontinued
+ - All menus now show icons to visually identify actions
+ - Fixes issues preventing FrostWire to cleanly shutdown its services on Exit
+ - Hides Android top status bar when previewing videos in full screen mode
+ - Fixes video preview bug that would overlay ad and download button
+   over video if user went to full screenmode too soon
+ - Mopub/Ogury integration
+
+FrostWire 1.9.1 - APR/06/2017
+ - Video/Audio search preview screen material design updates
+ - My Files checkbox selection mode has a new action toolbar
+ - My Files checkbox selection mode can be started by long pressing on
+   a file (as long as it's not a ringtone)
+ - Fixes issues opening Pictures, Videos, Docs with My Files after SDK 24
+   on some devices
+ - Updated android support library to 25.3.1 and gms to 10.2.1
+ - MoPub 4.13.0 update and optimizations, less bandwidth usage
+ - New jlibtorrent 1.2.0.7-RC3
+ - BitSnoop search removed
+
+FrostWire 1.9.0 - MAR/10/2017
+ - New material-design navigation menu
+ - Full featured miniplayer available outside My Music
+ - Fixes bug where equalizer window would not open
+ - Music player cleanup
+ - InMobi network removed
+ - All translations up to date
+ - BTJunkie.eu search discontinued
+ - New jlibtorrent 1.2.0.6 (final release) fixes BitTorrent bugs
+ - Colors and theme update, major icons cleanup
+ - Fixes issue on music player when screen was rotated
+ - Fixes issues with SoundCloud search
+
 FrostWire 1.8.9 - FEB/13/2017
  - New privacy enhancing setting to automatically disable all bittorrent activity if a VPN
    connection is not present
  - New privacy enhancing setting to not keep .torrent files when starting torrent transfers
  - Use 3G/4G for Bittorrent setting renamed to "Wi-Fi Only"
- - Do not show Applovin video ads on exit
  - New jlibtorrent 1.2.0.6 fixes BitTorrent connectivity issues
  - Applovin update (6.4.2)
  - Android support library update to 25.1.1

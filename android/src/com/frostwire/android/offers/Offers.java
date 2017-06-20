@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2016, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,13 +45,10 @@ public final class Offers {
     static final boolean DEBUG_MODE = false;
     static final ThreadPool THREAD_POOL = new ThreadPool("Offers", 1, 5, 1L, new LinkedBlockingQueue<Runnable>(), true);
     public static final String PLACEMENT_INTERSTITIAL_EXIT = "interstitial_exit";
-    public static final String PLACEMENT_INTERSTITIAL_HOME = "interstitial_home";
-    public static final String PLACEMENT_INTERSTITIAL_TRANSFERS = "interstitial_transfers";
     private static long lastInterstitialShownTimestamp = -1;
     private static Map<String,AdNetwork> AD_NETWORKS;
     private final static MoPubAdNetwork MOPUB = new MoPubAdNetwork();
-    private final static AppLovinAdNetwork APP_LOVIN = new AppLovinAdNetwork();
-    private final static InMobiAdNetwork IN_MOBI = new InMobiAdNetwork();
+    private final static AppLovinAdNetwork APP_LOVIN = AppLovinAdNetwork.getInstance();
     private final static RemoveAdsNetwork REMOVE_ADS = new RemoveAdsNetwork();
     private final static Long STARTUP_TIME = System.currentTimeMillis();
     private static long lastInitAdnetworksInvocationTimestamp;
@@ -60,6 +57,10 @@ public final class Offers {
     }
 
     public static void initAdNetworks(Activity activity) {
+        if (stopAdNetworksIfPurchasedRemoveAds(activity)) {
+            LOG.info("Offers.initAdNetworks() aborted, user paid for ad removal.");
+            return;
+        }
         long now = System.currentTimeMillis();
         if (now - lastInitAdnetworksInvocationTimestamp < 5000) {
             LOG.info("Offers.initAdNetworks() aborted, too soon to reinitialize networks.");
@@ -71,7 +72,6 @@ public final class Offers {
                 adNetwork.initialize(activity);
             }
         }
-        stopAdNetworksIfPurchasedRemoveAds(activity);
     }
 
     public static void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -85,7 +85,6 @@ public final class Offers {
             AD_NETWORKS = new HashMap<>();
             AD_NETWORKS.put(MOPUB.getShortCode(), MOPUB);
             AD_NETWORKS.put(APP_LOVIN.getShortCode(), APP_LOVIN);
-            AD_NETWORKS.put(IN_MOBI.getShortCode(), IN_MOBI);
             AD_NETWORKS.put(REMOVE_ADS.getShortCode(), REMOVE_ADS);
         }
         return AD_NETWORKS;
@@ -200,15 +199,18 @@ public final class Offers {
         }
     }
 
-    private static void stopAdNetworksIfPurchasedRemoveAds(Context context) {
+    private static boolean stopAdNetworksIfPurchasedRemoveAds(Context context) {
         //final ConfigurationManager CM = ConfigurationManager.instance();
+        boolean stopped = false;
         final PlayStore playStore = PlayStore.getInstance();
         final Collection<Product> purchasedProducts = Products.listEnabled(playStore, Products.DISABLE_ADS_FEATURE);
         if (purchasedProducts != null && purchasedProducts.size() > 0) {
             //CM.setBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE, false);
             Offers.stopAdNetworks(context);
+            stopped = true;
             LOG.info("Turning off ads, user previously purchased AdRemoval");
         }
+        return stopped;
     }
 
     /**

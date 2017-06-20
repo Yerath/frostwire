@@ -188,7 +188,7 @@ public class InstallerUpdater implements Runnable {
         }
     }
 
-    private void startTorrentDownload(String torrentFile, String saveDataPath) throws Exception {
+    private void startTorrentDownload(String torrentFile, String saveDataPath) {
 
         TorrentInfo tinfo = new TorrentInfo(new File(torrentFile));
         final Sha1Hash updateInfoHash = tinfo.infoHash();
@@ -200,7 +200,7 @@ public class InstallerUpdater implements Runnable {
             public int[] types() {
                 return new int[]{
                         TORRENT_RESUMED.swig(),
-                        TORRENT_ADDED.swig(),
+                        ADD_TORRENT.swig(),
                         PIECE_FINISHED.swig(),
                         TORRENT_FINISHED.swig(),
                 };
@@ -224,7 +224,7 @@ public class InstallerUpdater implements Runnable {
                         return;
                     }
 
-                    if (alert.type().equals(TORRENT_ADDED) && alertSha1Hash.toHex().equals(updateInfoHash.toHex())) {
+                    if (alert.type().equals(ADD_TORRENT) && alertSha1Hash.toHex().equals(updateInfoHash.toHex())) {
                         Sha1Hash sha1 = ((TorrentAlert<?>) alert).handle().infoHash();
                         th = BTEngine.getInstance().find(sha1);
                         _manager = th;
@@ -452,7 +452,7 @@ public class InstallerUpdater implements Runnable {
         return lastMD5;
     }
 
-    private static void downloadTorrentFile(String torrentURL, File saveLocation) throws IOException, URISyntaxException {
+    private static void downloadTorrentFile(String torrentURL, File saveLocation) throws IOException {
         byte[] contents = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC).getBytes(torrentURL);
 
         // save the torrent locally if you have to

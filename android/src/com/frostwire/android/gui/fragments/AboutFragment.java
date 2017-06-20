@@ -31,6 +31,7 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractFragment;
+import com.frostwire.jlibtorrent.LibTorrent;
 
 import org.apache.commons.io.IOUtils;
 
@@ -52,11 +53,14 @@ public final class AboutFragment extends AbstractFragment {
 
         //Title, build number and changelog setup
         TextView title = findView(rootView, R.id.fragment_about_title);
-        String basicOrPlus = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "Basic" : "Plus";
+        String basicOrPlus = (String) getText(Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? R.string.basic : R.string.plus);
         title.setText("FrostWire " + basicOrPlus + " v" + Constants.FROSTWIRE_VERSION_STRING);
 
         TextView buildNumber = findView(rootView, R.id.fragment_about_build_number);
-        buildNumber.setText("build " + BuildConfig.VERSION_CODE + ", sdk level " + Build.VERSION.SDK_INT);
+        buildNumber.setText(getText(R.string.build) + " " + BuildConfig.VERSION_CODE + ", sdk level " + Build.VERSION.SDK_INT);
+
+        TextView jlibtorrentVersion = findView(rootView, R.id.fragment_about_jlibtorrent_version);
+        jlibtorrentVersion.setText("jlibtorrent v" + LibTorrent.jlibtorrentVersion());
 
         TextView changelog = findView(rootView, R.id.fragment_about_changelog);
         setupClickUrl(changelog, Constants.CHANGELOG_URL);

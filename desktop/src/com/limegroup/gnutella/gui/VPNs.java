@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.limewire.util.OSUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -32,6 +33,8 @@ import java.io.InputStreamReader;
  */
 public final class VPNs {
     private static Pattern piaKillSwitchRoutePattern = null;
+    private static String netstatCmd = null;
+
     public static boolean isVPNActive() {
         boolean result = false;
 
@@ -62,7 +65,7 @@ public final class VPNs {
     private static boolean isPosixVPNActive() {
         boolean result = false;
         try {
-            String netstatCmd = "netstat";
+            String netstatCmd = getNetstatPath();
             String[] output = readProcessOutput(netstatCmd,"-nr").split("\r\n");
             for (String line : output) {
                 if (line.startsWith("0") && line.contains("tun")) {
@@ -135,4 +138,17 @@ public final class VPNs {
             piaKillSwitchRoutePattern = Pattern.compile(".*?(0\\.0\\.0\\.0).*?(0\\.0\\.0\\.0).*?(10\\.\\d*\\.\\d*\\.\\d*).*(10\\.\\d*\\.\\d*\\.\\d*).*?(\\d\\d)");
         }
     }
+
+    private static String getNetstatPath() {
+        if (netstatCmd != null) {
+            return netstatCmd;
+        }
+        String candidate = "netstat";
+        if (OSUtils.isMacOSX() && new File("/usr/sbin/netstat").exists()) {
+            candidate = "/usr/sbin/netstat";
+        }
+        netstatCmd = candidate;
+        return netstatCmd;
+    }
+
 }

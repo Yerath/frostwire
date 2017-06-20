@@ -147,7 +147,7 @@ public class PromotionsAdapter extends AbstractAdapter<Slide> {
 
     private void startPromotionDownlaod(Slide theSlide) {
         promotionDownloader.startPromotionDownload(theSlide);
-        Offers.showInterstitialOfferIfNecessary((MainActivity) getContext(), Offers.PLACEMENT_INTERSTITIAL_TRANSFERS, false, false);
+        Offers.showInterstitialOfferIfNecessary((MainActivity) getContext(), Offers.PLACEMENT_INTERSTITIAL_EXIT, false, false);
     }
 
     @Override
@@ -263,8 +263,8 @@ public class PromotionsAdapter extends AbstractAdapter<Slide> {
         return specialOfferLayout;
     }
 
-    public void onAllFeaturedDownloadsClick() {
-        UIUtils.openURL(getContext(), Constants.ALL_FEATURED_DOWNLOADS_URL);
+    public void onAllFeaturedDownloadsClick(String from) {
+        UIUtils.openURL(getContext(), Constants.ALL_FEATURED_DOWNLOADS_URL + "?from=" + from);
     }
 
     public void onSpecialOfferClick() {

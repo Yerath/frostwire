@@ -23,6 +23,7 @@ import com.frostwire.search.SearchMatcher;
 import com.frostwire.search.torrent.TorrentRegexSearchPerformer;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author gubatron
@@ -30,21 +31,20 @@ import java.io.IOException;
  */
 public final class MonovaSearchPerformer extends TorrentRegexSearchPerformer<MonovaSearchResult> {
 
-    private static final int MAX_RESULTS = 10;
+    private static final int MAX_RESULTS = 20;
     private static final String REGEX = "(?is)<a href=\"//%s/torrent/(?<itemid>[0-9]*?)/(?<filename>.*?)\">";
     private static final String HTML_REGEX = "(?is)" +
             // filename
             "<div class=\"col-md-12.*?<h1>\\n(?<filename>.*?) </h1>.*?" +
             // creationtime
             "<td>Added:</td>.*?<td>(?<creationtime>.*?)</td>.*?" +
-            // seeds
-            "<td>(?<seeds>\\d+) seeders.*?" +
             // infohash
             "<td>Hash:</td>.*?<td>(?<infohash>[A-Fa-f0-9]{40})</td>.*?" +
             // size
             "<td>Total size:</td>.*?<td>(?<size>.*?)</td>.*?" +
             // download torrent url
             "<a id=\"download-file\" href=\"(?<torrenturl>.*?)\" class=\"btn";
+    private static int SIX_MONTHS_IN_SECS = 15552000;
 
     public MonovaSearchPerformer(String domainName, long token, String keywords, int timeout) {
         super(domainName, token, keywords, timeout, 1, 2 * MAX_RESULTS, MAX_RESULTS, String.format(REGEX, domainName), HTML_REGEX);
@@ -74,7 +74,10 @@ public final class MonovaSearchPerformer extends TorrentRegexSearchPerformer<Mon
     @Override
     protected MonovaSearchResult fromHtmlMatcher(CrawlableSearchResult sr, SearchMatcher matcher) {
         MonovaSearchResult r = new MonovaSearchResult(sr.getDetailsUrl(), matcher);
-        // filter out magnets
-        return !r.getTorrentUrl().contains("magnet") ? r : null;
+        int now_in_seconds = (int) (System.currentTimeMillis() / 1000);
+        int creation_time_in_seconds = (int) (r.getCreationTime() / 1000);
+        int sr_age_in_seconds = now_in_seconds - creation_time_in_seconds;
+        boolean less_than_6_months_old = sr_age_in_seconds < SIX_MONTHS_IN_SECS;
+        return r.getTorrentUrl().contains("magnet") && less_than_6_months_old ? r : null;
     }
 }

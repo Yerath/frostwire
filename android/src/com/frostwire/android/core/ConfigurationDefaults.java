@@ -19,7 +19,10 @@ package com.frostwire.android.core;
 
 import android.os.Environment;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author gubatron
@@ -58,7 +61,6 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_GUI_SHOW_TRANSFERS_ON_DOWNLOAD_START, true);
         defaultValues.put(Constants.PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG, true);
         defaultValues.put(Constants.PREF_KEY_GUI_USE_APPLOVIN, false);
-        defaultValues.put(Constants.PREF_KEY_GUI_USE_INMOBI, false);
         defaultValues.put(Constants.PREF_KEY_GUI_USE_REMOVEADS, true);
         defaultValues.put(Constants.PREF_KEY_GUI_USE_MOPUB, true);
         defaultValues.put(Constants.PREF_KEY_GUI_REMOVEADS_BACK_TO_BACK_THRESHOLD, 50);
@@ -67,7 +69,6 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_GUI_OFFERS_WATERFALL,
                 new String[]{
                         Constants.AD_NETWORK_SHORTCODE_APPLOVIN,
-                        Constants.AD_NETWORK_SHORTCODE_INMOBI,
                         Constants.AD_NETWORK_SHORTCODE_REMOVEADS
                 });
         defaultValues.put(Constants.PREF_KEY_GUI_HAPTIC_FEEDBACK_ON, true);
@@ -82,13 +83,12 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_SEARCH_FULLTEXT_SEARCH_RESULTS_LIMIT, 256);
 
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_EXTRATORRENT, true);
-        defaultValues.put(Constants.PREF_KEY_SEARCH_USE_MININOVA, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_VERTOR, true);
+        defaultValues.put(Constants.PREF_KEY_SEARCH_USE_ZOOQLE, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_YOUTUBE, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_SOUNDCLOUD, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_ARCHIVEORG, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_FROSTCLICK, true);
-        defaultValues.put(Constants.PREF_KEY_SEARCH_USE_BITSNOOP, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_TORLOCK, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_TORRENTDOWNLOADS, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_LIMETORRENTS, true);

@@ -17,8 +17,23 @@
 
 package com.frostwire.bittorrent;
 
-import com.frostwire.jlibtorrent.*;
-import com.frostwire.jlibtorrent.alerts.*;
+import com.frostwire.jlibtorrent.AlertListener;
+import com.frostwire.jlibtorrent.AnnounceEntry;
+import com.frostwire.jlibtorrent.Entry;
+import com.frostwire.jlibtorrent.FileStorage;
+import com.frostwire.jlibtorrent.PiecesTracker;
+import com.frostwire.jlibtorrent.Priority;
+import com.frostwire.jlibtorrent.SessionHandle;
+import com.frostwire.jlibtorrent.TorrentHandle;
+import com.frostwire.jlibtorrent.TorrentInfo;
+import com.frostwire.jlibtorrent.TorrentStatus;
+import com.frostwire.jlibtorrent.Vectors;
+import com.frostwire.jlibtorrent.alerts.Alert;
+import com.frostwire.jlibtorrent.alerts.AlertType;
+import com.frostwire.jlibtorrent.alerts.PieceFinishedAlert;
+import com.frostwire.jlibtorrent.alerts.SaveResumeDataAlert;
+import com.frostwire.jlibtorrent.alerts.TorrentAlert;
+import com.frostwire.jlibtorrent.swig.add_torrent_params;
 import com.frostwire.jlibtorrent.swig.entry;
 import com.frostwire.jlibtorrent.swig.string_entry_map;
 import com.frostwire.jlibtorrent.swig.string_vector;
@@ -27,11 +42,18 @@ import com.frostwire.transfers.BittorrentDownload;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.transfers.TransferState;
 import com.frostwire.util.Logger;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author gubatron
@@ -221,12 +243,6 @@ public final class BTDownload implements BittorrentDownload {
             return 0;
         }
 
-        // TODO: Add logic to check completion logic for merkle based torrents.
-        //if (th.getTorrentInfo().isMerkleTorrent()) {
-        //final ArrayList<Sha1Hash> sha1Hashes = th.getTorrentInfo().merkleTree();
-        //perform sha1Hash check
-        //}
-
         if (th.status() == null) {
             return 0;
         }
@@ -238,17 +254,8 @@ public final class BTDownload implements BittorrentDownload {
             return 100;
         }
 
-        int p = (int) (th.status().progress() * 100);
+        int p = (int) (fp * 100);
         if (p > 0 && state != TorrentStatus.State.CHECKING_FILES) {
-            return Math.min(p, 100);
-        }
-        final long received = getTotalBytesReceived();
-        final long size = getSize();
-        if (size == received) {
-            return 100;
-        }
-        if (size > 0) {
-            p = (int) ((received * 100) / size);
             return Math.min(p, 100);
         }
 
@@ -261,7 +268,7 @@ public final class BTDownload implements BittorrentDownload {
     }
 
     public long getBytesReceived() {
-        return th.isValid() ? th.status().totalDownload() : 0;
+        return th.isValid() ? th.status().totalDone() : 0;
     }
 
     public long getTotalBytesReceived() {
@@ -616,9 +623,9 @@ public final class BTDownload implements BittorrentDownload {
             if (th.isValid()) {
                 String infoHash = th.infoHash().toString();
                 File file = engine.resumeDataFile(infoHash);
-                Entry e = alert.resumeData();
-                e.swig().dict().set(EXTRA_DATA_KEY, Entry.fromMap(extra).swig());
-                FileUtils.writeByteArrayToFile(file, e.bencode());
+                entry e = add_torrent_params.write_resume_data(alert.swig().getParams());
+                e.dict().set(EXTRA_DATA_KEY, Entry.fromMap(extra).swig());
+                FileUtils.writeByteArrayToFile(file, Vectors.byte_vector2bytes(e.bencode()));
             }
         } catch (Throwable e) {
             LOG.warn("Error saving resume data", e);

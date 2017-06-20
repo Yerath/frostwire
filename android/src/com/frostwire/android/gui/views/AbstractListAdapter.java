@@ -27,13 +27,24 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
 import com.frostwire.android.R;
 import com.frostwire.util.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * We extend from ListAdapter to populate our ListViews.
@@ -63,6 +74,7 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
     private ListAdapterFilter<T> filter;
     private boolean checkboxesVisibility;
     private boolean showMenuOnClick;
+    private boolean showMenuOnLongClick;
 
     private final List<Dialog> dialogs;
 
@@ -189,6 +201,20 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
             }
         }
         return null;
+    }
+
+    public int getViewPosition(View view) {
+        T tag = (T) view.getTag();
+        int result = -1;
+        int i=0;
+        for (T t : visualList) {
+            if (t.equals(tag)) {
+                result = i;
+                break;
+            }
+            i++;
+        }
+        return result;
     }
 
     public long getItemId(int position) {
@@ -335,6 +361,10 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
         this.showMenuOnClick = showMenuOnClick;
     }
 
+    public void setShowMenuOnLongClick(boolean showMenuOnLongClick) {
+        this.showMenuOnLongClick = showMenuOnLongClick;
+    }
+
     /**
      * Implement this method to refresh the UI contents of the List Item with the data.
      */
@@ -469,6 +499,9 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
                 checkbox.setOnCheckedChangeListener(checkboxOnCheckedChangeListener);
             }
         }
+        if (view instanceof Checkable) {
+            ((Checkable) view).setChecked(checked.contains(item));
+        }
     }
 
     protected void initTouchFeedback(View v, T item) {
@@ -538,10 +571,12 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
 
     private final class ViewOnLongClickListener implements OnLongClickListener {
         public boolean onLongClick(View v) {
-            MenuAdapter adapter = getMenuAdapter(v);
-            if (adapter != null && adapter.getCount() > 0) {
-                trackDialog(new MenuBuilder(adapter).show());
-                return true;
+            if (showMenuOnLongClick) {
+                MenuAdapter adapter = getMenuAdapter(v);
+                if (adapter != null && adapter.getCount() > 0) {
+                    trackDialog(new MenuBuilder(adapter).show());
+                    return true;
+                }
             }
             return onItemLongClicked(v);
         }

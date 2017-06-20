@@ -46,7 +46,7 @@
     <string name="activity_uploads_title_text">Качвания</string>
     <string name="torrent_max_peers">Макс връстници</string>
     <string name="request_again">Искане отново</string>
-    <string name="use_mininova">Използвайте Mininova.org</string>
+    <string name="use_zooqle">Използвайте Zooqle.com</string>
     <string name="restarting_summary">FrostWire ще се рестартира сега за предоставени разрешения, за да влязат в сила</string>
     <string name="clear_search_cache">Ясно търсене кеш</string>
     <string name="unshare">Премахване на споделянето</string>
@@ -88,7 +88,6 @@
     <string name="send_to_chat">Изпрати на чат</string>
     <string name="delete_this_track">Изтриване на това парче</string>
     <string name="five_dollars">$5</string>
-    <string name="use_isohunt">Използвайте ISOHunt.com</string>
     <string name="loading_indeterminate">Зареждане…</string>
     <string name="nickname_hint">Псевдоним</string>
     <string name="transfer_status_demuxing">Demuxing</string>
@@ -161,7 +160,6 @@
     <string name="love_frostwire">Любовта FrostWire</string>
     <string name="wifi_networks_only_summary">Запазване на данни. Свали само ако се установи, Wi-Fi връзка. </string>
     <string name="or_enter_url">или въведете URL</string>
-    <string name="use_vertor">Използвайте Vertor.com</string>
     <string name="azureus_manager_item_initializing">Инициализиране</string>
     <string name="documents">Документи</string>
     <string name="fetching_file_list">Извличането списък на споделена</string>
@@ -225,19 +223,16 @@
     <string name="one_year">Една година</string>
     <string name="transfers_select_completed">завършена</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">Пауза/Стоп всички трансфери</string>
-    <string name="use_kat_summary">KAT е магнит на основата, работи само на Wifi</string>
     <string name="sharing_num_files">Споделяне %1$s файлове от типа %2$s</string>
     <string name="cancel_transfer">Отмени трансфер</string>
     <string name="support_frostwire">Подкрепа FrostWire</string>
     <string name="wifi_sharing">Wi-Fi Sharing</string>
-    <string name="use_clearbits">Използвайте ClearBits.net</string>
     <string name="torrent_max_total_connections_summary">Максимална обща връзки</string>
     <string name="toast_on_disconnect">Връзката с BitTorrent. Всички трансфери BitTorrent са спрели.</string>
     <string name="transfers_select_downloading">изтегляне</string>
     <string name="clear_torrent_index_summary">Ясно индекс торент</string>
     <string name="frostwire_features">FROSTWIRE ХАРАКТЕРИСТИКИ</string>
     <string name="free_apps">Безплатни приложения</string>
-    <string name="send_to_third_party">Изпращане/качване</string>
     <string name="support_free_software">Подкрепа за свободен софтуер</string>
     <string name="send_my_geo_location_summary">Pings ще изпрати приблизителното ви геолокация, за да намерите най-близките колеги.</string>
     <string name="wants_to_share_a_file">иска да споделите файл</string>
@@ -391,7 +386,6 @@
     <string name="vpn_client_feature_1">Военно-клас криптиране</string>
     <string name="transfers_context_resume_all_torrent_transfers">Възобновяване на всички торент трансфери</string>
     <string name="vpn_client_feature_3">Частен и logless сърфиране</string>
-    <string name="use_bitsnoop">Използвайте BitSnoop</string>
     <string name="free_download">Безплатно сваляне</string>
     <string name="internet_discovery_summary">Се свързва с отдалечени връстници в интернет.</string>
     <string name="couldnt_share_file">Не може да споделите файла. Странни път намери.</string>
@@ -513,7 +507,6 @@
     <string name="error_not_enough_peers">Опитайте отново, не е достатъчно връстници</string>
     <string name="seed_finished_torrents_summary">Сподели парчета на торенти с никого в Интернет чрез BitTorrent</string>
     <string name="support_frostwire_summary">Показване на реклами в подкрепа на развитието на това приложение.</string>
-    <string name="use_kat">Използвайте KAT</string>
     <string name="back">Обратно</string>
     <string name="searchable_activity_label">За търсене на активност</string>
     <string name="visit_vpn_client">Посетете ExpressVPN</string>
@@ -607,7 +600,6 @@
     <string name="are_you_sure">Сигурен ли си?</string>
     <string name="application">Приложение</string>
     <string name="update_title">Актуализиране на време!</string>
-    <string name="use_btjunkie">Използвайте BTJunkie</string>
     <string name="peer_http_download_status_downloading">Свалянето</string>
     <string name="picture">снимка</string>
     <string name="files_shared">споделените файлове</string>
@@ -623,5 +615,32 @@
     <string name="remove_ads">Премахни рекламите</string>
     <string name="your_connection_has_dropped_stopping_services">Вашият Wifi връзка е намалял. Спиране услуги.</string>
     <string name="use_tpb_summary">TPB е магнит на основата, работи само на Wifi</string>
-
+    <string name="cloud_download_aborted_on_mobile_data">Текуща настройка позволява да се тегли, когато не по Wifi мрежа</string>
+    <string name="sharing_privacy_settings">Споделяне и поверителност</string>
+    <string name="delete_started_torrents_summary">Изтриване торентни файлове след началото на изтеглянето</string>
+    <string name="dismiss">Отхвърляне</string>
+    <string name="torrent_preferences_header">Торент Предпочитания</string>
+    <string name="search_preferences_one_engine_checked_always">По подразбиране, една търсачка, трябва да бъдат проверявани по всяко време</string>
+    <string name="switch_off_engine_without_vpn">VPN е неактивна, спиране на двигателя BitTorrent.</string>
+    <string name="notification_other_header">Уведомления и Други</string>
+    <string name="number_picker_tip">Съвет: докосване избран номер, за да използвате клавиатура</string>
+    <string name="search_torrent_settings">Търсене/Торент Настройки</string>
+    <string name="general_settings">Общ</string>
+    <string name="pro">PRO</string>
+    <string name="build">build</string>
+    <string name="data_saving_turn_off_transfers">Няма налична Wifi. са били спрени Всички трансфери.</string>
+    <string name="vpn_drop_protection_title">VPN защита е неактивна</string>
+    <string name="deselect_all">Премахване на избора</string>
+    <string name="data_saving_kill_http_warning">Това ще спре всички незавършени трансфери в прогрес</string>
+    <string name="delete_started_torrents">Изтриване торентни файлове</string>
+    <string name="search_header">Търсене</string>
+    <string name="bandwidth_usage_settings">Използване на пропускателната способност</string>
+    <string name="unlimited">неограничен</string>
+    <string name="according_to_settings_i_cant_seed_due_to_data_savings">Според настройките си, че не може да започне засяването, освен ако не сте на Wi-Fi, поради икономии от данни. Файлът ще бъде готова за засяване автоматично, когато се върнем към интернет поддръжка за Wi-Fi мрежа.</string>
+    <string name="vpn_drop_protection_summary">Защитете своя личен живот. Автоматично деактивиране на BitTorrent трансфери, освен ако криптиран VPN връзка е активна</string>
+    <string name="cannot_start_engine_without_vpn">BitTorrent няма да започне, освен ако VPN е достъпно. (Проверете вашите настройки)</string>
+    <string name="use_magnet_summary">базиран магнитни линкове, работи само на Wifi</string>
+    <string name="mobile_data_saving">Мобилни данни спестяване</string>
+    <string name="data_saving_kill_http_warning_title">Предупреждение: Http трансфери в прогрес</string>
+    <string name="fullscreen">цял екран</string>
 </resources>

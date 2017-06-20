@@ -30,7 +30,6 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +46,6 @@ import com.andrew.apollo.IApolloService;
 import com.andrew.apollo.MusicPlaybackService;
 import com.andrew.apollo.MusicStateListener;
 import com.andrew.apollo.utils.ApolloUtils;
-import com.andrew.apollo.utils.Lists;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.MusicUtils.ServiceToken;
 import com.andrew.apollo.utils.NavUtils;
@@ -69,7 +67,7 @@ import java.util.ArrayList;
 import static com.andrew.apollo.utils.MusicUtils.musicPlaybackService;
 
 /**
- * A base {@link FragmentActivity} used to update the bottom bar and
+ * A base {@link Activity} used to update the bottom bar and
  * bind to Apollo's service.
  * <p>
  * {@link HomeActivity} extends from this skeleton.
@@ -81,7 +79,7 @@ public abstract class BaseActivity extends AbstractActivity
     /**
      * Play state and meta change listener
      */
-    private final ArrayList<MusicStateListener> mMusicStateListener = Lists.newArrayList();
+    private final ArrayList<MusicStateListener> mMusicStateListener = new ArrayList<>();
 
     /**
      * The service token
@@ -135,8 +133,7 @@ public abstract class BaseActivity extends AbstractActivity
         setToolbarView(v);
 
         TextView title = findView(R.id.view_toolbar_header_title);
-        // R.string.app_name is actually "My Music" (from original apollo code)
-        title.setText(R.string.app_name);
+        title.setText(R.string.my_music);
     }
 
     @Override
@@ -183,9 +180,9 @@ public abstract class BaseActivity extends AbstractActivity
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Search view
-        getMenuInflater().inflate(R.menu.apollo_menu_search, menu);
+        getMenuInflater().inflate(R.menu.player_search, menu);
 
-        final SearchView searchView = (SearchView) menu.findItem(R.id.apollo_menu_item_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.menu_player_search).getActionView();
         // Add voice search
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
@@ -215,7 +212,7 @@ public abstract class BaseActivity extends AbstractActivity
             case android.R.id.home:
                 getBackHome();
                 return true;
-            case R.id.menu_new_playlist:
+            case R.id.menu_player_new_playlist:
                 onOptionsItemNewPlaylistSelected();
                 return true;
             default:

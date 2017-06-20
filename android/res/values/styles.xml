@@ -20,36 +20,9 @@
  */
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
     <style name="Widget.Holo.Light.ActionMode" parent="android:Widget.Holo.ActionMode">
-        <item name="android:titleTextStyle">
-            @android:style/TextAppearance.Holo.Widget.ActionMode.Title
-        </item>
-        <item name="android:subtitleTextStyle">
-            @android:style/TextAppearance.Holo.Widget.ActionMode.Subtitle
-        </item>
-    </style>
-
-    <style name="ActionBar" parent="android:Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/action_bar_background</item>
-        <item name="android:titleTextStyle">@style/ActionBar.TitleTextStyle</item>
-        <item name="android:subtitleTextStyle">@style/ActionBar.TitleTextStyle</item>
-    </style>
-
-    <style name="ActionBar.TitleTextStyle" parent="android:TextAppearance.Medium">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ActionBar.SubTitleTextStyle" parent="android:TextAppearance.Small">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ActionButton.Overflow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_menu_moreoverflow</item>
-    </style>
-
-    <style name="Widget.CompoundButton.CheckBox" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/checkbox_button_selector</item>
+        <item name="android:titleTextStyle">@android:style/TextAppearance.Holo.Widget.ActionMode.Title</item>
+        <item name="android:subtitleTextStyle">@android:style/TextAppearance.Holo.Widget.ActionMode.Subtitle</item>
     </style>
 
     <style name="Widget.Button" parent="android:Widget.Holo.Light.Button">
@@ -174,24 +147,15 @@
 
     <!-- Main Fragment Simple Header begin -->
 
-    <style name="MainFragmentSimpleHeader" parent="@android:style/TextAppearance.Large">
-        <item name="android:textSize">18sp</item>
-        <item name="android:gravity">center</item>
+    <style name="ToolbarMainHeaderTitle">
+        <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <!-- Main Fragment Simple Header end -->
-
-
-    <!-- Browse Peer fragment file counter header begin -->
-
-    <style name="BrowsePeerFragmentFileCounterHeader" parent="@android:style/TextAppearance.Small">
-        <item name="android:gravity">center</item>
+    <style name="ToolbarMainHeaderCounter">
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-
-    <!-- Browse Peer fragment file counter header end -->
-
 
     <!-- Menu Media Type begin -->
 
@@ -270,7 +234,7 @@
 
     <style name="TransfersIndicator">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/app_light_gray_text</item>
+        <item name="android:textColor">@color/app_text_light</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textSize">@dimen/text_size_micro</item>
     </style>
@@ -283,8 +247,19 @@
     </style>
 
     <style name="TransfersNotificationSub">
-        <item name="android:textColor">@color/app_dark_grey_text</item>
+        <item name="android:textColor">@color/app_text_secondary</item>
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="BodyListTitleText">
+        <item name="android:textColor">@color/app_text_primary</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BodyListSubtitleText">
+        <item name="android:textColor">@color/app_text_primary</item>
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
@@ -309,13 +284,13 @@
     <style name="ListItemExt">
         <item name="android:singleLine">true</item>
         <item name="android:textSize">@dimen/text_small</item>
-        <item name="android:textColor">@color/app_text_secondary_dark</item>
+        <item name="android:textColor">@color/app_text_secondary</item>
     </style>
 
     <style name="ListItemExtra">
         <item name="android:singleLine">true</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/app_text_secondary_dark</item>
+        <item name="android:textColor">@color/app_text_secondary</item>
     </style>
 
     <style name="ListItemAd">
@@ -329,13 +304,13 @@
     <style name="TransferListItemSize">
         <item name="android:singleLine">true</item>
         <item name="android:textSize">@dimen/text_micro</item>
-        <item name="android:textColor">@color/basic_blue_darker_highlight</item>
+        <item name="android:textColor">@color/basic_blue_highlight_dark</item>
     </style>
 
     <style name="NoSearchResultsLink">
         <item name="android:singleLine">true</item>
         <item name="android:textSize">18dp</item>
-        <item name="android:textColor">@color/app_highlight_text</item>
+        <item name="android:textColor">@color/app_text_highlight</item>
     </style>
 
     <style name="SearchResultListItemSource">
@@ -407,20 +382,6 @@
         <item name="android:paddingBottom">20dp</item>
     </style>
 
-    <style name="DonationButton">
-        <item name="android:background">@drawable/donation_button_background_selector</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:padding">6dp</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="DonationButton2">
-        <item name="android:background">@drawable/btn_donation_background</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:padding">4dp</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <style name="BrowsePeerActivityHeaderTitle" parent="@android:style/TextAppearance.Small">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
@@ -446,7 +407,7 @@
     </style>
 
     <style name="VPNTitleSecond.Color">
-        <item name="android:textColor">@color/basic_blue_darker_highlight</item>
+        <item name="android:textColor">@color/basic_blue_highlight_dark</item>
     </style>
 
     <style name="VPNSubTitle">
@@ -493,7 +454,7 @@
     </style>
 
     <style name="BuyNoAdsCardDescription">
-        <item name="android:textColor">@color/app_text_secondary_dark</item>
+        <item name="android:textColor">@color/app_text_secondary</item>
         <item name="android:textSize">@dimen/text_x_medium</item>
     </style>
 
@@ -545,7 +506,7 @@
 
     <style name="BuyNoAdsAdText.AdFree">
         <item name="android:textSize">@dimen/text_x_large</item>
-        <item name="android:textColor">@color/app_dark_blue</item>
+        <item name="android:textColor">@color/basic_blue_dark</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingBottom">16dp</item>
@@ -558,7 +519,7 @@
     <!-- Wizard Activity -->
 
     <style name="WizardActivity" parent="Theme.FrostWire">
-        <item name="android:textColorSecondary">@color/frostwire_gray_explanation_text</item>
+        <item name="android:textColorSecondary">@color/app_text_wizard</item>
         <item name="android:windowBackground">@color/app_background</item>
     </style>
 
@@ -591,7 +552,7 @@
     </style>
 
     <style name="WizardText.Sub">
-        <item name="android:textColor">@color/frostwire_gray_explanation_text</item>
+        <item name="android:textColor">@color/app_text_wizard</item>
     </style>
 
     <style name="WizardText.Terms">
@@ -600,7 +561,7 @@
     </style>
 
     <style name="WizardDivider">
-        <item name="android:background">@color/app_dark_blue</item>
+        <item name="android:background">@color/basic_blue_dark</item>
         <item name="android:height">1dp</item>
         <item name="android:layout_marginBottom">12dp</item>
         <item name="android:layout_marginTop">12dp</item>
@@ -610,18 +571,22 @@
         <item name="android:layout_marginBottom">0dp</item>
     </style>
 
-
     <!-- Used within entire app -->
 
     <style name="divider_line">
-        <item name="android:background">@color/basic_gray</item>
-        <item name="android:height">2dp</item>
-        <item name="android:layout_marginTop">15dp</item>
-        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:background">@color/app_divider</item>
+        <item name="android:height">1dp</item>
     </style>
     <!--v21-->
     <style name="MediumText">
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="SelectDeselectAllText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/app_text_primary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Default Dialog -->
@@ -648,6 +613,7 @@
 
     <style name="DefaultDialogTheme.MainText">
         <item name="android:textSize">@dimen/text_large</item>
+        <item name="android:textColor">@color/app_text_primary</item>
     </style>
 
     <style name="DefaultDialogTheme.SmallText">
@@ -691,4 +657,12 @@
         <item name="android:paddingRight">0dp</item>
     </style>
 
+    <!-- OGURY -->
+    <style name="Presage.Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

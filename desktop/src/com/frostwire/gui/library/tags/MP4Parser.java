@@ -67,8 +67,9 @@ class MP4Parser extends AbstractTagParser {
                 String genre = getGenre(ilst);
                 String track = ""; //getTrackNumberValue(ilst);
                 String year = "";// getBoxValue(ilst, AppleRecordingYear2Box.class);
+                String lyrics = "";
 
-                data = sanitize(duration, bitrate, title, artist, album, comment, genre, track, year);
+                data = sanitize(duration, bitrate, title, artist, album, comment, genre, track, year, lyrics);
 
             } finally {
                 IOUtils.closeQuietly(iso);
@@ -131,15 +132,6 @@ class MP4Parser extends AbstractTagParser {
         T b = ilst.findFirst(type);
         return b != null ? b.value() : "";
     }
-
-//    private String getTrackNumberValue(AppleItemListBox ilst) {
-//        String value = "";
-//        List<AppleTrackNumberBox> boxes = ilst.find(AppleTrackNumberBox.class);
-//        if (boxes != null && !boxes.isEmpty()) {
-//            value = String.valueOf(boxes.get(0).getA());
-//        }
-//        return value;
-//    }
 
     private <T extends AppleIntegerBox> long getBoxLongValue(AppleItemListBox ilst, int type) {
         AppleIntegerBox b = ilst.findFirst(type);

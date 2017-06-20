@@ -52,7 +52,7 @@ public final class RecentFragment extends BaseAlbumFragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         // Remove the album from the list
         menu.add(Fragments.RECENT_FRAGMENT_GROUP_ID, FragmentMenuItems.REMOVE_FROM_RECENT, Menu.NONE,
-                getString(R.string.context_menu_remove_from_recent));
+                getString(R.string.context_menu_remove_from_recent)).setIcon(R.drawable.contextmenu_icon_remove_transfer);
     }
 
     @Override
@@ -60,6 +60,8 @@ public final class RecentFragment extends BaseAlbumFragment {
         int layout;
         if (isSimpleLayout()) {
             layout = R.layout.list_item_normal;
+        } else if (isDetailedLayout()) {
+            layout = R.layout.list_item_detailed_no_background;
         } else {
             layout = R.layout.grid_items_normal;
         }

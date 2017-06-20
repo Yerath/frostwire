@@ -21,14 +21,19 @@ package com.frostwire.android;
 import android.app.Application;
 import android.os.Build;
 import android.support.v4.provider.DocumentFile;
+
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.NetworkManager;
-import com.frostwire.jlibtorrent.LibTorrent;
 import com.frostwire.jlibtorrent.swig.libtorrent;
 import com.frostwire.jlibtorrent.swig.posix_stat_t;
 import com.frostwire.jlibtorrent.swig.posix_wrapper;
+import com.frostwire.platform.AbstractPlatform;
+import com.frostwire.platform.DefaultFileSystem;
+import com.frostwire.platform.FileSystem;
+import com.frostwire.platform.Platform;
+import com.frostwire.platform.Platforms;
+import com.frostwire.platform.VPNMonitor;
 import com.frostwire.util.Logger;
-import com.frostwire.platform.*;
 
 import java.io.File;
 
@@ -75,6 +80,11 @@ public final class AndroidPlatform extends AbstractPlatform {
         }
 
         return NetworkType.NONE;
+    }
+
+    @Override
+    public VPNMonitor vpn() {
+        return null;
     }
 
     public static boolean saf() {

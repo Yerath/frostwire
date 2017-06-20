@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import com.frostwire.alexandria.Playlist;
 import com.frostwire.alexandria.PlaylistItem;
 import com.frostwire.alexandria.db.LibraryDatabase;
 import com.frostwire.gui.bittorrent.CreateTorrentDialog;
+import com.frostwire.gui.library.tags.TagsReader;
 import com.frostwire.gui.player.MediaPlayer;
 import com.frostwire.gui.player.MediaSource;
 import com.frostwire.gui.theme.SkinMenu;
@@ -39,11 +40,10 @@ import com.limegroup.gnutella.gui.tables.LimeJTable;
 import com.limegroup.gnutella.gui.util.GUILauncher;
 import com.limegroup.gnutella.gui.util.GUILauncher.LaunchableProvider;
 import com.limegroup.gnutella.util.QueryUtils;
+import net.miginfocom.swing.MigLayout;
 import org.limewire.util.OSUtils;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
@@ -87,6 +87,8 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
      */
     private static LibraryPlaylistsTableMediator INSTANCE;
 
+    private JPanel mainContainer;
+
     public static LibraryPlaylistsTableMediator instance() {
         if (INSTANCE == null) {
             INSTANCE = new LibraryPlaylistsTableMediator();
@@ -103,7 +105,6 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
      */
     protected void buildListeners() {
         super.buildListeners();
-
         LAUNCH_ACTION = new LaunchAction();
         LAUNCH_OS_ACTION = new LaunchOSAction();
         OPEN_IN_FOLDER_ACTION = new OpenInFolderAction();
@@ -133,7 +134,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
                 } else {
                     super.paintComponent(g);
                 }
-            };
+            }
         };
         Action[] aa = new Action[] { LAUNCH_ACTION, OPEN_IN_FOLDER_ACTION, SEND_TO_FRIEND_ACTION, DELETE_ACTION, OPTIONS_ACTION };
         BUTTON_ROW = new ButtonRow(aa, ButtonRow.X_AXIS, ButtonRow.NO_GLUE);
@@ -196,8 +197,8 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         boolean dirSelected = false;
         boolean fileSelected = false;
 
-        for (int i = 0; i < rows.length; i++) {
-            File f = DATA_MODEL.get(rows[i]).getFile();
+        for (int row : rows) {
+            File f = DATA_MODEL.get(row).getFile();
             if (f.isDirectory()) {
                 dirSelected = true;
                 //				if (IncompleteFileManager.isTorrentFolder(f))
@@ -329,27 +330,6 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
     }
 
     /**
-     * Cancels all editing of fields in the tree and table.
-     */
-    void cancelEditing() {
-        if (TABLE.isEditing()) {
-            TableCellEditor editor = TABLE.getCellEditor();
-            editor.cancelCellEditing();
-        }
-    }
-
-    /**
-     * Adds the mouse listeners to the wrapped <tt>JTable</tt>.
-     *
-     * @param listener the <tt>MouseInputListener</tt> that handles mouse events
-     *                 for the library
-     */
-    void addMouseInputListener(final MouseInputListener listener) {
-        TABLE.addMouseListener(listener);
-        TABLE.addMouseMotionListener(listener);
-    }
-
-    /**
      * Updates the Table based on the selection of the given table.
      * Perform lookups to remove any store files from the shared folder
      * view and to only display store files in the store view
@@ -362,6 +342,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         currentPlaylist = playlist;
         List<PlaylistItem> items = currentPlaylist.getItems();
 
+        updatePlaylistComponentHeader(null);
         clearTable();
         for (final PlaylistItem item : items) {
             GUIMediator.safeInvokeLater(new Runnable() {
@@ -372,6 +353,86 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
             });
         }
         forceResort();
+    }
+
+    @Override
+    public JComponent getComponent() {
+        mainContainer = new JPanel(new MigLayout("fillx, wrap 1","[]", "[][fill, grow]"));
+
+        mainContainer.add(new JPanel(), "wrap"); // dummy
+        mainContainer.add(super.getComponent(),"grow");
+
+        return mainContainer;
+    }
+
+
+    private void updatePlaylistComponentHeader(String lyrics) {
+        JPanel playlistHeaderRow = new JPanel(new MigLayout("insets 10, fillx","[][grow][]"));
+        LibraryCoverArtPanel artWorkLabel = new LibraryCoverArtPanel();
+        if (currentPlaylist == null) {
+            return;
+        }
+        if (!currentPlaylist.isStarred()) {
+            PlaylistItem playlistItem = currentPlaylist.getItems().get(0);
+            if (playlistItem != null) {
+                TagsReader tagsReader = new TagsReader(new File(playlistItem.getFilePath()));
+                artWorkLabel.setTagsReader(tagsReader).asyncRetrieveImage();
+            }
+        }
+
+        // left
+        Dimension artDimensions = new Dimension(210, 210);
+        artWorkLabel.setPreferredSize(artDimensions);
+        artWorkLabel.setMinimumSize(artDimensions);
+        artWorkLabel.setMaximumSize(artDimensions);
+        playlistHeaderRow.add(artWorkLabel);
+
+        // center
+        JPanel centerContainer = new JPanel(new MigLayout("fillx, wrap 1"));
+        JLabel playlistSectionTitle = new JLabel(I18n.tr("Playlist"));
+        // Replace this for a text edit or show a dialog to rename it
+        JLabel playlistTitle = new JLabel(currentPlaylist.getName());
+        Font font = new Font("Helvetica", Font.BOLD, 30);
+        playlistTitle.setFont(font);
+        JLabel duration = new JLabel(LibraryUtils.getPlaylistDurationInDDHHMMSS(currentPlaylist) + ", " + currentPlaylist.getItems().size() + " " + I18n.tr("tracks"));
+
+        centerContainer.add(playlistSectionTitle, "wrap");
+        centerContainer.add(playlistTitle, "wrap");
+        centerContainer.add(duration);
+        playlistHeaderRow.add(centerContainer, "alignx left, aligny top, growx, pushx");
+
+        if (lyrics != null && !lyrics.isEmpty()) {
+            JPanel lyricsPanel = createLyricsPanel(lyrics);
+            playlistHeaderRow.add(lyricsPanel, "aligny top");
+        }
+        mainContainer.removeAll();
+        mainContainer.add(playlistHeaderRow,"wrap, growx");
+        mainContainer.add(super.getComponent(),"grow");
+        mainContainer.invalidate();
+        mainContainer.repaint();
+        mainContainer.updateUI();
+    }
+
+    private JPanel createLyricsPanel(String lyrics) {
+        int[] sel = TABLE.getSelectedRows();
+        String songTitle = "";
+        if (sel.length == 1) {
+            PlaylistItem playlistItem = currentPlaylist.getItems().get(sel[0]);
+            songTitle = playlistItem.getTrackTitle() + " ";
+        }
+
+        File selectedFile = getFile(sel[0]);
+        JPanel lyricsPanel = new JPanel(new MigLayout("fillx, wrap 1, insets 0","[]"));
+        lyricsPanel.add(new JLabel(songTitle + I18n.tr("Lyrics")),"wrap");
+        JTextArea lyricsTextArea = new JTextArea(lyrics);
+        lyricsTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(lyricsTextArea);
+        Dimension d = new Dimension(500, 210);
+        scrollPane.setPreferredSize(d);
+        scrollPane.setMaximumSize(d);
+        scrollPane.setMaximumSize(d);
+        lyricsPanel.add(scrollPane, "growx");
+        return lyricsPanel;
     }
 
     /**
@@ -396,51 +457,12 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         return TABLE;
     }
 
-    ButtonRow getButtonRow() {
-        return BUTTON_ROW;
-    }
-
-    LibraryPlaylistsTableDataLine[] getSelectedLibraryLines() {
+    private LibraryPlaylistsTableDataLine[] getSelectedLibraryLines() {
         int[] selected = TABLE.getSelectedRows();
         LibraryPlaylistsTableDataLine[] lines = new LibraryPlaylistsTableDataLine[selected.length];
         for (int i = 0; i < selected.length; i++)
             lines[i] = DATA_MODEL.get(selected[i]);
         return lines;
-    }
-
-    /**
-     * Accessor for the <tt>ListSelectionModel</tt> for the wrapped
-     * <tt>JTable</tt> instance.
-     */
-    ListSelectionModel getSelectionModel() {
-        return TABLE.getSelectionModel();
-    }
-
-    /**
-     * Programatically starts a rename of the selected item.
-     */
-    void startRename() {
-        int row = TABLE.getSelectedRow();
-        if (row == -1)
-            return;
-        //int viewIdx = TABLE.convertColumnIndexToView(LibraryPlaylistsTableDataLine.NAME_IDX);
-        //TABLE.editCellAt(row, viewIdx, LibraryTableCellEditor.EVENT);
-    }
-
-    /**
-     * Shows the license window.
-     */
-    void showLicenseWindow() {
-        //        LibraryTableDataLine ldl = DATA_MODEL.get(TABLE.getSelectedRow());
-        //        if(ldl == null)
-        //            return;
-        //        FileDesc fd = ldl.getFileDesc();
-        //        License license = fd.getLicense();
-        //        URN urn = fd.getSHA1Urn();
-        //        LimeXMLDocument doc = ldl.getXMLDocument();
-        //        LicenseWindow window = LicenseWindow.create(license, urn, doc, this);
-        //        GUIUtils.centerOnScreen(window);
-        //        window.setVisible(true);
     }
 
     /**
@@ -491,7 +513,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
      * Launches the associated applications for each selected file
      * in the library if it can.
      */
-    void launch(boolean playMedia) {
+    private void launch(boolean playMedia) {
         int[] rows = TABLE.getSelectedRows();
         if (rows.length == 0) {
             return;
@@ -554,13 +576,11 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         DELETE_ACTION.setEnabled(true);
         SEND_TO_ITUNES_ACTION.setEnabled(true);
 
-        if (selectedFile != null && !selectedFile.getName().endsWith(".torrent")) {
+        if (!selectedFile.getName().endsWith(".torrent")) {
             CREATE_TORRENT_ACTION.setEnabled(sel.length == 1);
         }
 
-        if (selectedFile != null) {
-            SEND_TO_FRIEND_ACTION.setEnabled(sel.length == 1);
-        }
+        SEND_TO_FRIEND_ACTION.setEnabled(sel.length == 1);
 
         if (sel.length == 1 && selectedFile.isFile() && selectedFile.getParentFile() != null) {
             OPEN_IN_FOLDER_ACTION.setEnabled(true);
@@ -569,7 +589,14 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         }
 
         if (sel.length == 1) {
-            LibraryMediator.instance().getLibraryCoverArt().setFile(getSelectedLibraryLines()[0].getFile());
+            TagsReader tagsReader = new TagsReader(selectedFile);
+            LibraryMediator.instance().getLibraryCoverArtPanel().setTagsReader(tagsReader).asyncRetrieveImage();
+            LibraryUtils.asyncParseLyrics(tagsReader, new LibraryUtils.OnLyricsParsedUICallback() {
+                @Override
+                public void run() {
+                    updatePlaylistComponentHeader(getLyrics());
+                }
+            });
         }
     }
 
@@ -585,14 +612,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         CREATE_TORRENT_ACTION.setEnabled(false);
         DELETE_ACTION.setEnabled(false);
         SEND_TO_ITUNES_ACTION.setEnabled(false);
-    }
-
-    /**
-     * Refreshes the enabledness of the Enqueue button based
-     * on the player enabling state.
-     */
-    public void setPlayerEnabled(boolean value) {
-        handleSelection(TABLE.getSelectedRow());
+        // TODO: Update UI and hide lyrics
     }
 
     private boolean hasExploreAction() {
@@ -610,7 +630,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
          */
         private static final long serialVersionUID = 949208465372392591L;
 
-        public LaunchAction() {
+        LaunchAction() {
             putValue(Action.NAME, I18n.tr("Launch"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Launch Selected Files"));
             putValue(LimeAction.ICON_NAME, "LIBRARY_LAUNCH");
@@ -628,7 +648,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
          */
         private static final long serialVersionUID = 949208465372392592L;
 
-        public LaunchOSAction() {
+        LaunchOSAction() {
             String os = "OS";
             if (OSUtils.isWindows()) {
                 os = "Windows";
@@ -654,7 +674,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
          */
         private static final long serialVersionUID = 1693310684299300459L;
 
-        public OpenInFolderAction() {
+        OpenInFolderAction() {
             putValue(Action.NAME, I18n.tr("Explore"));
             putValue(LimeAction.SHORT_NAME, I18n.tr("Explore"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Open Folder Containing the File"));
@@ -678,7 +698,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = 1898917632888388860L;
 
-        public CreateTorrentAction() {
+        CreateTorrentAction() {
             super(I18n.tr("Create New Torrent"));
             putValue(Action.LONG_DESCRIPTION, I18n.tr("Create a new .torrent file"));
         }
@@ -688,7 +708,8 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
             File selectedFile = DATA_MODEL.getFile(TABLE.getSelectedRow());
 
             //can't create torrents out of empty folders.
-            if (selectedFile.isDirectory() && selectedFile.listFiles().length == 0) {
+            //noinspection ConstantConditions
+            if (selectedFile.isDirectory() && selectedFile.listFiles() != null && selectedFile.listFiles().length == 0) {
                 JOptionPane.showMessageDialog(null, I18n.tr("The folder you selected is empty."), I18n.tr("Invalid Folder"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -710,7 +731,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = 4726989286129406765L;
 
-        public SendAudioFilesToiTunes() {
+        SendAudioFilesToiTunes() {
             putValue(Action.NAME, I18n.tr("Send to iTunes"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Send audio files to iTunes"));
         }
@@ -718,9 +739,8 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
         @Override
         public void actionPerformed(ActionEvent e) {
             int[] rows = TABLE.getSelectedRows();
-            List<File> files = new ArrayList<File>();
-            for (int i = 0; i < rows.length; i++) {
-                int index = rows[i]; // current index to add
+            List<File> files = new ArrayList<>();
+            for (int index : rows) {
                 File file = DATA_MODEL.getFile(index);
                 files.add(file);
                 //iTunesMediator.instance().scanForSongs(file);
@@ -749,7 +769,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private final File _file;
 
-        public FileProvider(File file) {
+        FileProvider(File file) {
             _file = file;
         }
 
@@ -762,7 +782,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = -9099898749358019734L;
 
-        public ImportToPlaylistAction() {
+        ImportToPlaylistAction() {
             putValue(Action.NAME, I18n.tr("Import .m3u to Playlist"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Import a .m3u file into the selected playlist"));
             putValue(LimeAction.ICON_NAME, "PLAYLIST_IMPORT_TO");
@@ -777,7 +797,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = 6149822357662730490L;
 
-        public ExportPlaylistAction() {
+        ExportPlaylistAction() {
             putValue(Action.NAME, I18n.tr("Export Playlist to .m3u"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Export this playlist into a .m3u file"));
             putValue(LimeAction.ICON_NAME, "PLAYLIST_IMPORT_NEW");
@@ -792,7 +812,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = 8400749433148927596L;
 
-        public CleanupPlaylistAction() {
+        CleanupPlaylistAction() {
             putValue(Action.NAME, I18n.tr("Cleanup playlist"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Remove the deleted items"));
             putValue(LimeAction.ICON_NAME, "PLAYLIST_CLEANUP");
@@ -808,7 +828,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         private static final long serialVersionUID = 758150680592618044L;
 
-        public RefreshID3TagsAction() {
+        RefreshID3TagsAction() {
             putValue(Action.NAME, I18n.tr("Refresh Audio Properties"));
             putValue(Action.SHORT_DESCRIPTION, I18n.tr("Refresh the audio properties based on ID3 tags"));
             putValue(LimeAction.ICON_NAME, "PLAYLIST_REFRESHID3TAGS");
@@ -816,7 +836,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
 
         public void actionPerformed(ActionEvent e) {
             LibraryPlaylistsTableDataLine[] lines = getSelectedLibraryLines();
-            List<PlaylistItem> items = new ArrayList<PlaylistItem>(lines.length);
+            List<PlaylistItem> items = new ArrayList<>(lines.length);
             for (LibraryPlaylistsTableDataLine line : lines) {
                 items.add(line.getInitializeObject());
             }
@@ -827,7 +847,7 @@ final class LibraryPlaylistsTableMediator extends AbstractLibraryTableMediator<L
     @Override
     public List<MediaSource> getFilesView() {
         int size = DATA_MODEL.getRowCount();
-        List<MediaSource> result = new ArrayList<MediaSource>(size);
+        List<MediaSource> result = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             try {
                 result.add(new MediaSource(DATA_MODEL.get(i).getPlayListItem()));

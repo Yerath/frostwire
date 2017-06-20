@@ -75,15 +75,17 @@ public class PlaylistFragment extends ApolloFragment<PlaylistAdapter, Playlist> 
         mItem = mAdapter.getItem(mPosition);
 
         // Play the playlist
-        menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.PLAY_SELECTION, Menu.NONE, R.string.context_menu_play_selection);
+        menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.PLAY_SELECTION, Menu.NONE, R.string.context_menu_play_selection)
+                .setIcon(R.drawable.contextmenu_icon_play);
 
         // Add the playlist to the queue
-        menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.ADD_TO_QUEUE, Menu.NONE, R.string.add_to_queue);
+        menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.ADD_TO_QUEUE, Menu.NONE, R.string.add_to_queue)
+                .setIcon(R.drawable.contextmenu_icon_queue_add);
 
         // Delete and rename (user made playlists)
         if (info.position > 1) {
-            menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.RENAME_PLAYLIST, Menu.NONE, R.string.context_menu_rename_playlist);
-            menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.DELETE, Menu.NONE, R.string.context_menu_delete);
+            menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.RENAME_PLAYLIST, Menu.NONE, R.string.context_menu_rename_playlist).setIcon(R.drawable.contextmenu_icon_rename);
+            menu.add(Fragments.PLAYLIST_FRAGMENT_GROUP_ID, FragmentMenuItems.DELETE, Menu.NONE, R.string.context_menu_delete).setIcon(R.drawable.contextmenu_icon_trash);
         }
     }
 
@@ -117,7 +119,6 @@ public class PlaylistFragment extends ApolloFragment<PlaylistAdapter, Playlist> 
                     return true;
                 case FragmentMenuItems.DELETE:
                     final PlaylistFragmentDeleteDialog playlistFragmentDeleteDialog = buildDeleteDialog();
-                    // This is to avoid casting issues between android.support.v4.app.FragmentManager and android.app.FragmentManager
                     playlistFragmentDeleteDialog.show(getActivity().getFragmentManager());
                     return true;
                 default:

@@ -241,15 +241,17 @@ public abstract class MediaPlayer implements RefreshListener, MPlayerUIEventList
                 durationInSeconds = -1;
 
                 if (currentMedia.getFile() != null) {
-                    LibraryMediator.instance().getLibraryCoverArt().setFile(currentMedia.getFile());
+                    TagsReader tagsReader = new TagsReader(currentMedia.getFile());
+                    LibraryMediator.instance().getLibraryCoverArtPanel().setTagsReader(tagsReader).asyncRetrieveImage();
                     calculateDurationInSecs(currentMedia.getFile());
                     playMedia();
                 } else if (currentMedia.getPlaylistItem() != null && currentMedia.getPlaylistItem().getFilePath() != null) {
-                    LibraryMediator.instance().getLibraryCoverArt().setFile(new File(currentMedia.getPlaylistItem().getFilePath()));
+                    TagsReader tagsReader = new TagsReader(new File(currentMedia.getPlaylistItem().getFilePath()));
+                    LibraryMediator.instance().getLibraryCoverArtPanel().setTagsReader(tagsReader).asyncRetrieveImage();
                     playMedia();
                     durationInSeconds = (long) currentMedia.getPlaylistItem().getTrackDurationInSecs();
                 } else if (currentMedia instanceof StreamMediaSource) {
-                    LibraryMediator.instance().getLibraryCoverArt().setDefault();
+                    LibraryMediator.instance().getLibraryCoverArtPanel().setDefault();
                     playMedia(((StreamMediaSource) currentMedia).showPlayerWindow());
                 }
                 notifyOpened(source);

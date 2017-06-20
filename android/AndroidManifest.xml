@@ -20,8 +20,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.frostwire.android"
     android:installLocation="auto"
-    android:versionCode="341"
-    android:versionName="1.8.9">
+    android:versionCode="366"
+    android:versionName="1.9.2">
     <!-- IMPORTANT!! Ignore these, just use as a reference, now it's handled with gradle -->
     <!-- Plus  android:versionCode="9050xyz" (always commit like this, plus!)-->
     <!-- Basic android:versionCode="9010xyz" (don't commit like this) -->
@@ -75,7 +75,8 @@
             android:name="com.frostwire.android.gui.activities.MainActivity"
             android:label="@string/application_label"
             android:launchMode="singleTask"
-            android:protectionLevel="dangerous">
+            android:protectionLevel="dangerous"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -134,7 +135,6 @@
         <activity
             android:name="com.frostwire.android.gui.activities.WizardActivity"
             android:label="@string/application_label"
-            android:screenOrientation="portrait"
             android:theme="@style/WizardActivity" />
         <activity
             android:name="com.frostwire.android.gui.activities.SettingsActivity"
@@ -147,7 +147,7 @@
             android:label="@string/about" />
         <activity
             android:name="com.frostwire.android.gui.activities.PreviewPlayerActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="screenSize"
             android:label="@string/playing" />
         <activity
             android:name="com.frostwire.android.gui.activities.VPNStatusDetailActivity"
@@ -273,24 +273,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- InMobi -->
-        <!-- when we get to Android N as a target (API level 24) add -> android:resizeableActivity="false" -->
-        <activity
-            android:name="com.inmobi.rendering.InMobiAdActivity"
-            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
-            android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <receiver
-            android:name="com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="com.inmobi.share.id" />
-            </intent-filter>
-        </receiver>
-
         <!-- AppLovin -->
         <meta-data
             android:name="applovin.sdk.key"
@@ -317,6 +299,53 @@
         <activity
             android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="com.mopub.mobileads.RewardedMraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+        <!-- OGURY/PRESAGE LIBRARY -->
+        <meta-data android:name="presage_key" android:value="269485"/>
+        <service
+            android:name="io.presage.PresageService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="io.presage.PresageService.PIVOT" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name="io.presage.activities.PresageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:label="@string/application_label"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="io.presage.intent.action.LAUNCH_WEBVIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <receiver android:name="io.presage.receiver.NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="io.presage.receiver.NetworkChangeReceiver.ONDESTROY" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="io.presage.receiver.AlarmReceiver" />
+        <provider
+            android:name="io.presage.provider.PresageProvider"
+            android:authorities="${applicationId}.PresageProvider"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 </manifest>

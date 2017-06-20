@@ -1,19 +1,18 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2016, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.frostwire.android.gui;
@@ -34,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.frostwire.android.BuildConfig;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -42,30 +42,37 @@ import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.offers.Offers;
-import com.frostwire.util.Logger;
 import com.frostwire.platform.Platforms;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.JsonUtils;
+import com.frostwire.util.Logger;
 import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXStats;
 import com.frostwire.uxstats.UXStatsConf;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- *
  * @author gubatron
  * @author aldenml
  */
 public final class SoftwareUpdater {
+
     private static final Logger LOG = Logger.getLogger(SoftwareUpdater.class);
     private final boolean ALWAYS_SHOW_UPDATE_DIALOG = false; // debug flag.
 
     public interface ConfigurationUpdateListener {
-        void onConfigurationUpdate();
+        void onConfigurationUpdate(boolean updateAvailable);
     }
 
     private static final String TAG = "FW.SoftwareUpdater";
@@ -97,16 +104,12 @@ public final class SoftwareUpdater {
         this.configurationUpdateListeners = new HashSet<>();
     }
 
-//    public boolean isOldVersion() {
-//        return oldVersion;
-//    }
-//
-//    public String getLatestVersion() {
-//        return latestVersion;
-//    }
-
     public void checkForUpdate(final Context context) {
         long now = System.currentTimeMillis();
+
+        if (context instanceof ConfigurationUpdateListener) {
+            addConfigurationUpdateListener((ConfigurationUpdateListener) context);
+        }
 
         if (now - updateTimestamp < UPDATE_MESSAGE_TIMEOUT) {
             return;
@@ -166,7 +169,7 @@ public final class SoftwareUpdater {
             protected void onPostExecute(Boolean result) {
 
                 if (ALWAYS_SHOW_UPDATE_DIALOG || (result && !isCancelled())) {
-                    notifyUpdate(context);
+                    notifyUserAboutUpdate(context);
                 }
 
                 // Even if we're offline, we need to disable these for the Google Play Distro.
@@ -178,8 +181,8 @@ public final class SoftwareUpdater {
                     scSE.setActive(false);
                 }
 
-                //nav menu always needs to be updated after we read the config.
-                notifyConfigurationUpdateListeners();
+                //nav menu or other components always needs to be updated after we read the config.
+                notifyConfigurationUpdateListeners(result);
             }
         };
 
@@ -192,7 +195,7 @@ public final class SoftwareUpdater {
      * @throws IOException
      */
     private boolean handleOTAUpdate() throws IOException {
-        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION && !Constants.IS_BASIC_AND_DEBUG) {
             LOG.info("handleOTAUpdate(): it's Google Play, aborting -> false");
             return false;
         }
@@ -235,6 +238,7 @@ public final class SoftwareUpdater {
         try {
             configurationUpdateListeners.add(listener);
         } catch (Throwable ignored) {
+            LOG.error("Could not add configuration update listener", ignored);
         }
     }
 
@@ -242,7 +246,7 @@ public final class SoftwareUpdater {
         return Platforms.get().systemPaths().update();
     }
 
-    private void notifyUpdate(final Context context) {
+    public void notifyUserAboutUpdate(final Context context) {
         try {
             if (update.a == null) {
                 update.a = UPDATE_ACTION_OTA; // make it the old behavior
@@ -250,11 +254,11 @@ public final class SoftwareUpdater {
 
             if (update.a.equals(UPDATE_ACTION_OTA)) {
                 if (!ALWAYS_SHOW_UPDATE_DIALOG && !getUpdateApk().exists()) {
-                    LOG.info("notifyUpdate(): " + getUpdateApk().getAbsolutePath() + " not found. Aborting.");
+                    LOG.info("notifyUserAboutUpdate(): " + getUpdateApk().getAbsolutePath() + " not found. Aborting.");
                     return;
                 }
 
-                LOG.info("notifyUpdate(): showing update dialog.");
+                LOG.info("notifyUserAboutUpdate(): showing update dialog.");
                 SoftwareUpdaterDialog.newInstance(update).show(((Activity) context).getFragmentManager());
             } else if (update.a.equals(UPDATE_ACTION_MARKET)) {
 
@@ -270,6 +274,7 @@ public final class SoftwareUpdater {
             }
         } catch (Throwable e) {
             Log.e(TAG, "Failed to notify update", e);
+            updateTimestamp = -1; // try again next time MainActivity is resumed
         }
     }
 
@@ -298,7 +303,6 @@ public final class SoftwareUpdater {
         if (Constants.IS_BASIC_AND_DEBUG) {
             myBuild += 40000;
         }
-        LOG.info("isFrostWireOld(myBuild=" + myBuild + ", latestBuild=" + latestBuild + ")");
         boolean result;
         try {
             int latestBuildNum = Integer.parseInt(latestBuild);
@@ -307,6 +311,7 @@ public final class SoftwareUpdater {
             LOG.error("isFrostWireOld() can't parse latestBuild number.", ignored);
             result = false;
         }
+        LOG.info("isFrostWireOld(myBuild=" + myBuild + ", latestBuild=" + latestBuild + ") => " + result);
         return result;
     }
 
@@ -399,11 +404,12 @@ public final class SoftwareUpdater {
         }
     }
 
-    private void notifyConfigurationUpdateListeners() {
+    private void notifyConfigurationUpdateListeners(boolean result) {
         for (ConfigurationUpdateListener listener : configurationUpdateListeners) {
             try {
-                listener.onConfigurationUpdate();
+                listener.onConfigurationUpdate(result);
             } catch (Throwable ignored) {
+                LOG.error(ignored.getMessage(), ignored);
             }
         }
     }
@@ -483,7 +489,7 @@ public final class SoftwareUpdater {
         @Override
         public void onClick(View v) {
             Engine.instance().stopServices(false);
-            UIUtils.openFile(context, getUpdateApk().getAbsolutePath(), Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE);
+            UIUtils.openFile(context, getUpdateApk().getAbsolutePath(), Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE, false);
             newSoftwareUpdaterDialog.dismiss();
         }
     }
@@ -525,7 +531,7 @@ public final class SoftwareUpdater {
 
             final ListView listview = findView(dlg, R.id.dialog_default_update_list_view);
             String[] values = new String[update.changelog.size()];
-            for (int i=0; i < values.length; i++) {
+            for (int i = 0; i < values.length; i++) {
                 values[i] = String.valueOf(Html.fromHtml("&#8226; " + update.changelog.get(i)));
             }
 
@@ -541,7 +547,7 @@ public final class SoftwareUpdater {
 
             Button yesButton = findView(dlg, R.id.dialog_default_update_button_yes);
             yesButton.setText(android.R.string.ok);
-            yesButton.setOnClickListener(new PositiveButtonOnClickListener(getActivity(),dlg));
+            yesButton.setOnClickListener(new PositiveButtonOnClickListener(getActivity(), dlg));
             noButton.setOnClickListener(new NegativeButtonOnClickListener(dlg));
         }
     }

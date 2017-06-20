@@ -92,7 +92,7 @@ public class StartDownloadTask extends ContextTask<Transfer> {
     protected void onPostExecute(Context ctx, Transfer transfer) {
         if (transfer != null) {
             if (ctx instanceof Activity) {
-                Offers.showInterstitialOfferIfNecessary((Activity) ctx, Offers.PLACEMENT_INTERSTITIAL_TRANSFERS, false, false);
+                Offers.showInterstitialOfferIfNecessary((Activity) ctx, Offers.PLACEMENT_INTERSTITIAL_EXIT, false, false);
             }
 
             if (!(transfer instanceof InvalidTransfer)) {
@@ -109,13 +109,8 @@ public class StartDownloadTask extends ContextTask<Transfer> {
                         UIUtils.showShortMessage(ctx, message);
                     }
                 }
-            } else {
-                if (transfer instanceof ExistingDownload) {
-                    //nothing happens here, the user should just see the transfer
-                    //manager and we avoid adding the same transfer twice.
-                } else {
-                    UIUtils.showLongMessage(ctx, ((InvalidTransfer) transfer).getReasonResId());
-                }
+            } else if (!(transfer instanceof ExistingDownload)) {
+                UIUtils.showLongMessage(ctx, ((InvalidTransfer) transfer).getReasonResId());
             }
         }
     }

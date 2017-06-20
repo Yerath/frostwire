@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2016, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2017, FrostWire(R). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
  */
 
 package com.frostwire.android.core;
+
+import com.frostwire.android.gui.util.UIUtils;
 
 /**
  * 
@@ -77,6 +79,7 @@ public class FileDescriptor implements Cloneable {
         this.dateAdded = dateAdded;
         this.dateModified = dateModified;
         this.shared = isShared;
+        ensureCorrectMimeType(this);
     }
 
     @Override
@@ -111,5 +114,11 @@ public class FileDescriptor implements Cloneable {
     @Override
     public FileDescriptor clone() {
         return new FileDescriptor(id, artist, title, album, year, filePath, fileType, mime, fileSize, dateAdded, dateModified, shared);
+    }
+
+    private void ensureCorrectMimeType(FileDescriptor fd) {
+        if (fd.mime == null || fd.filePath.endsWith(".torrent") || fd.filePath.endsWith(".apk")) {
+            fd.mime = UIUtils.getMimeType(fd.filePath);
+        }
     }
 }

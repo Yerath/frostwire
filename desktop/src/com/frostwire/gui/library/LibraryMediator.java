@@ -59,7 +59,7 @@ public class LibraryMediator {
 
     private LibraryExplorer libraryExplorer;
     private LibraryPlaylists libraryPlaylists;
-    private LibraryCoverArt libraryCoverArt;
+    private LibraryCoverArtPanel libraryCoverArtPanel;
     private LibraryLeftPanel libraryLeftPanel;
     private LibrarySearch librarySearch;
 
@@ -158,11 +158,11 @@ public class LibraryMediator {
         return librarySearch;
     }
 
-    public LibraryCoverArt getLibraryCoverArt() {
-        if (libraryCoverArt == null) {
-            libraryCoverArt = new LibraryCoverArt();
+    public LibraryCoverArtPanel getLibraryCoverArtPanel() {
+        if (libraryCoverArtPanel == null) {
+            libraryCoverArtPanel = new LibraryCoverArtPanel();
         }
-        return libraryCoverArt;
+        return libraryCoverArtPanel;
     }
 
     public JComponent getComponent() {
@@ -269,7 +269,7 @@ public class LibraryMediator {
 
     private JComponent getLibraryLeftPanel() {
         if (libraryLeftPanel == null) {
-            libraryLeftPanel = new LibraryLeftPanel(getLibraryExplorer(), getLibraryPlaylists(), getLibraryCoverArt());
+            libraryLeftPanel = new LibraryLeftPanel(getLibraryExplorer(), getLibraryPlaylists(), getLibraryCoverArtPanel());
         }
         return libraryLeftPanel;
     }

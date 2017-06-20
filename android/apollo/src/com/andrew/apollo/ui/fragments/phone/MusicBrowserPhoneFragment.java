@@ -1,24 +1,44 @@
 /*
- * Copyright (C) 2012 Andrew Neal Licensed under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with the
- * License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
+ * Copyright (C) 2012 Andrew Neal
+ * Modified by Angel Leon (@gubatron), Alden Torres (aldenml)
+ * Copyright (c) 2013-2017, FrostWire(R). All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.andrew.apollo.ui.fragments.phone;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.andrew.apollo.adapters.PagerAdapter;
 import com.andrew.apollo.adapters.PagerAdapter.MusicFragments;
-import com.andrew.apollo.ui.fragments.*;
-import com.andrew.apollo.utils.*;
+import com.andrew.apollo.ui.fragments.AlbumFragment;
+import com.andrew.apollo.ui.fragments.ArtistFragment;
+import com.andrew.apollo.ui.fragments.RecentFragment;
+import com.andrew.apollo.ui.fragments.SongFragment;
+import com.andrew.apollo.ui.fragments.TabFragmentOrder;
+import com.andrew.apollo.utils.MusicUtils;
+import com.andrew.apollo.utils.NavUtils;
+import com.andrew.apollo.utils.PreferenceUtils;
+import com.andrew.apollo.utils.SortOrder;
 import com.frostwire.android.R;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitlePageIndicator.OnCenterItemClickListener;
@@ -27,15 +47,16 @@ import com.viewpagerindicator.TitlePageIndicator.OnCenterItemClickListener;
  * This class is used to hold the {@link ViewPager} used for swiping between the
  * playlists, recent, artists, albums, songs, and genre {@link Fragment}
  * s for phones.
- * 
- * @NOTE: The reason the sort orders are taken care of in this fragment rather
- *        than the individual fragments is to keep from showing all of the menu
- *        items on tablet interfaces. That being said, I have a tablet interface
- *        worked out, but I'm going to keep it in the Play Store version of
- *        Apollo for a couple of weeks or so before merging it with CM.
+ * <p>
+ * NOTE: The reason the sort orders are taken care of in this fragment rather
+ * than the individual fragments is to keep from showing all of the menu
+ * items on tablet interfaces. That being said, I have a tablet interface
+ * worked out, but I'm going to keep it in the Play Store version of
+ * Apollo for a couple of weeks or so before merging it with CM.
+ *
  * @author Andrew Neal (andrewdneal@gmail.com)
  */
-public class MusicBrowserPhoneFragment extends Fragment implements
+public final class MusicBrowserPhoneFragment extends Fragment implements
         OnCenterItemClickListener {
 
     /**
@@ -48,11 +69,6 @@ public class MusicBrowserPhoneFragment extends Fragment implements
      */
     private PagerAdapter mPagerAdapter;
 
-    /**
-     * Theme resources
-     */
-    private ThemeUtils mResources;
-
     private PreferenceUtils mPreferences;
 
     /**
@@ -61,9 +77,6 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     public MusicBrowserPhoneFragment() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,14 +84,11 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         mPreferences = PreferenceUtils.getInstance(getActivity());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-            final Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // The View for the fragment's UI
-        final ViewGroup rootView = (ViewGroup)inflater.inflate(
+        final ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_music_browser_phone, container, false);
 
         // Initialize the adapter
@@ -89,7 +99,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         }
 
         // Initialize the ViewPager
-        mViewPager = (ViewPager)rootView.findViewById(R.id.fragment_home_phone_pager);
+        mViewPager = (ViewPager) rootView.findViewById(R.id.fragment_home_phone_pager);
         // Attch the adapter
         mViewPager.setAdapter(mPagerAdapter);
         // Offscreen pager loading limit
@@ -97,8 +107,8 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         // Start on the last page the user was on
         mViewPager.setCurrentItem(mPreferences.getStartPage());
 
-        // Initialze the TPI
-        final TitlePageIndicator pageIndicator = (TitlePageIndicator)rootView
+        // Initialize the TPI
+        final TitlePageIndicator pageIndicator = (TitlePageIndicator) rootView
                 .findViewById(R.id.fragment_home_phone_pager_titles);
         // Attach the ViewPager
         pageIndicator.setViewPager(mViewPager);
@@ -107,21 +117,13 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         return rootView;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Initialize the theme resources
-        mResources = new ThemeUtils(getActivity());
         // Enable the options menu
         setHasOptionsMenu(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onPause() {
         super.onPause();
@@ -129,60 +131,61 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         mPreferences.setStartPage(mViewPager.getCurrentItem());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        ThemeUtils.setFavoriteIcon(menu);
+        updateFavoriteMenuItemIcon(menu);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    private void updateFavoriteMenuItemIcon(Menu menu) {
+        MenuItem favMenuItem = menu.findItem(R.id.menu_player_favorite);
+        if (favMenuItem != null) {
+            favMenuItem.setIcon(MusicUtils.isFavorite() ?
+                    R.drawable.ic_action_favorite_selected : R.drawable.ic_action_favorite);
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         if (isPlaylistPage()) {
-            inflater.inflate(R.menu.new_playlist, menu);
+            inflater.inflate(R.menu.player_new_playlist, menu);
         }
 
         // Favorite action
-        inflater.inflate(R.menu.favorite, menu);
+        if (isSongPage()) {
+            inflater.inflate(R.menu.player_favorite, menu);
+        }
         // Shuffle all
-        inflater.inflate(R.menu.shuffle, menu);
+        inflater.inflate(R.menu.player_shuffle, menu);
         // Sort orders
         if (isRecentPage()) {
-            inflater.inflate(R.menu.view_as, menu);
+            inflater.inflate(R.menu.player_view_as, menu);
         } else if (isArtistPage()) {
-            inflater.inflate(R.menu.artist_sort_by, menu);
-            inflater.inflate(R.menu.view_as, menu);
+            inflater.inflate(R.menu.player_artist_sort_by, menu);
+            inflater.inflate(R.menu.player_view_as, menu);
         } else if (isAlbumPage()) {
-            inflater.inflate(R.menu.album_sort_by, menu);
-            inflater.inflate(R.menu.view_as, menu);
+            inflater.inflate(R.menu.player_album_sort_by, menu);
+            inflater.inflate(R.menu.player_view_as, menu);
         } else if (isSongPage()) {
-            inflater.inflate(R.menu.song_sort_by, menu);
+            inflater.inflate(R.menu.player_song_sort_by, menu);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_shuffle:
+            case R.id.menu_player_shuffle:
                 // Shuffle all the songs
                 MusicUtils.shuffleAll(getActivity());
                 return true;
-            case R.id.menu_favorite:
+            case R.id.menu_player_favorite:
                 // Toggle the current track as a favorite and update the menu
                 // item
                 MusicUtils.toggleFavorite();
                 getActivity().invalidateOptionsMenu();
                 return true;
-            case R.id.menu_sort_by_az:
+            case R.id.menu_player_sort_by_az:
                 if (isArtistPage()) {
                     mPreferences.setArtistSortOrder(SortOrder.ArtistSortOrder.ARTIST_A_Z);
                     getArtistFragment().refresh();
@@ -194,7 +197,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_za:
+            case R.id.menu_player_sort_by_za:
                 if (isArtistPage()) {
                     mPreferences.setArtistSortOrder(SortOrder.ArtistSortOrder.ARTIST_Z_A);
                     getArtistFragment().refresh();
@@ -206,7 +209,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_artist:
+            case R.id.menu_player_sort_by_artist:
                 if (isAlbumPage()) {
                     mPreferences.setAlbumSortOrder(SortOrder.AlbumSortOrder.ALBUM_ARTIST);
                     getAlbumFragment().refresh();
@@ -215,13 +218,13 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_album:
+            case R.id.menu_player_sort_by_album:
                 if (isSongPage()) {
                     mPreferences.setSongSortOrder(SortOrder.SongSortOrder.SONG_ALBUM);
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_year:
+            case R.id.menu_player_sort_by_year:
                 if (isAlbumPage()) {
                     mPreferences.setAlbumSortOrder(SortOrder.AlbumSortOrder.ALBUM_YEAR);
                     getAlbumFragment().refresh();
@@ -230,13 +233,13 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_duration:
+            case R.id.menu_player_sort_by_duration:
                 if (isSongPage()) {
                     mPreferences.setSongSortOrder(SortOrder.SongSortOrder.SONG_DURATION);
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_number_of_songs:
+            case R.id.menu_player_sort_by_number_of_songs:
                 if (isArtistPage()) {
                     mPreferences
                             .setArtistSortOrder(SortOrder.ArtistSortOrder.ARTIST_NUMBER_OF_SONGS);
@@ -246,20 +249,20 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                     getAlbumFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_number_of_albums:
+            case R.id.menu_player_sort_by_number_of_albums:
                 if (isArtistPage()) {
                     mPreferences
                             .setArtistSortOrder(SortOrder.ArtistSortOrder.ARTIST_NUMBER_OF_ALBUMS);
                     getArtistFragment().refresh();
                 }
                 return true;
-            case R.id.menu_sort_by_filename:
-                if(isSongPage()) {
+            case R.id.menu_player_sort_by_filename:
+                if (isSongPage()) {
                     mPreferences.setSongSortOrder(SortOrder.SongSortOrder.SONG_FILENAME);
                     getSongFragment().refresh();
                 }
                 return true;
-            case R.id.menu_view_as_simple:
+            case R.id.menu_player_view_as_simple:
                 if (isRecentPage()) {
                     mPreferences.setRecentLayout("simple");
                 } else if (isArtistPage()) {
@@ -269,7 +272,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                 }
                 NavUtils.goHome(getActivity());
                 return true;
-            case R.id.menu_view_as_detailed:
+            case R.id.menu_player_view_as_detailed:
                 if (isRecentPage()) {
                     mPreferences.setRecentLayout("detailed");
                 } else if (isArtistPage()) {
@@ -279,7 +282,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
                 }
                 NavUtils.goHome(getActivity());
                 return true;
-            case R.id.menu_view_as_grid:
+            case R.id.menu_player_view_as_grid:
                 if (isRecentPage()) {
                     mPreferences.setRecentLayout("grid");
                 } else if (isArtistPage()) {
@@ -295,9 +298,6 @@ public class MusicBrowserPhoneFragment extends Fragment implements
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCenterItemClick(final int position) {
         // If on the artist fragment, scrolls to the current artist
@@ -319,7 +319,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     }
 
     private ArtistFragment getArtistFragment() {
-        return (ArtistFragment)mPagerAdapter.getFragment(TabFragmentOrder.ARTISTS_POSITION);
+        return (ArtistFragment) mPagerAdapter.getFragment(TabFragmentOrder.ARTISTS_POSITION);
     }
 
     private boolean isAlbumPage() {
@@ -327,7 +327,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     }
 
     private AlbumFragment getAlbumFragment() {
-        return (AlbumFragment)mPagerAdapter.getFragment(TabFragmentOrder.ALBUMS_POSITION);
+        return (AlbumFragment) mPagerAdapter.getFragment(TabFragmentOrder.ALBUMS_POSITION);
     }
 
     private boolean isSongPage() {
@@ -335,7 +335,7 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     }
 
     private SongFragment getSongFragment() {
-        return (SongFragment)mPagerAdapter.getFragment(TabFragmentOrder.SONGS_POSITION);
+        return (SongFragment) mPagerAdapter.getFragment(TabFragmentOrder.SONGS_POSITION);
     }
 
     private boolean isRecentPage() {
@@ -347,6 +347,6 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     }
 
     private RecentFragment getRecentFragment() {
-        return (RecentFragment)mPagerAdapter.getFragment(TabFragmentOrder.RECENT_POSITION);
+        return (RecentFragment) mPagerAdapter.getFragment(TabFragmentOrder.RECENT_POSITION);
     }
 }
