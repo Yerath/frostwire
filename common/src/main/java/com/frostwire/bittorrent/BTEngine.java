@@ -60,6 +60,10 @@ public final class BTEngine extends SessionManager {
     private static final String TORRENT_ORIG_PATH_KEY = "torrent_orig_path";
     private static final String STATE_VERSION_KEY = "state_version";
     private static final String STATE_VERSION_VALUE = "1.2.0.6-RC4";
+
+    /*
+     * Data class for getting defaul directories
+     */
     public static final BTContext ctx = new BTContext();
 
     private final InnerListener innerListener;
@@ -75,6 +79,8 @@ public final class BTEngine extends SessionManager {
 
     private static class Loader {
         static final BTEngine INSTANCE = new BTEngine();
+        private Loader() {
+        }
     }
 
     public static BTEngine getInstance() {
