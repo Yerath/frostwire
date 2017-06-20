@@ -138,6 +138,17 @@ public class BTSettings extends SessionManager {
         applySettings(sp);
     }
 
+    public byte[] saveState() {
+        if (swig() == null) {
+            return [];
+        }
+
+        entry e = new entry();
+        swig().save_state(e);
+        e.set(STATE_VERSION_KEY, STATE_VERSION_VALUE);
+        return Vectors.byte_vector2bytes(e.bencode());
+    }
+
     File settingsFile() {
         return new File(ctx.homeDir, "settings.dat");
     }

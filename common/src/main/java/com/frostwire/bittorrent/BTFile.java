@@ -20,7 +20,7 @@ public class BTFile {
         File torrent = null;
 
         try {
-            byte[] arr = FileUtils.readFileToByteArray(resumeTorrentFile(infoHash));
+            byte[] arr = FileUtils.readFileToByteArray(createResumeTorrentFile(infoHash));
             entry e = entry.bdecode(Vectors.bytes2byte_vector(arr));
             torrent = new File(e.dict().get(TORRENT_ORIG_PATH_KEY).string());
         } catch (Throwable e) {
@@ -44,7 +44,7 @@ public class BTFile {
         return savePath;
     }
 
-    public File resumeTorrentFile(String infoHash) {
+    public File createResumeTorrentFile(String infoHash) {
         return new File(ctx.homeDir, infoHash + ".torrent");
     }
 
@@ -83,7 +83,7 @@ public class BTFile {
             e.dict().set(TORRENT_ORIG_PATH_KEY, new entry(torrentFile(name).getAbsolutePath()));
             byte[] arr = Vectors.byte_vector2bytes(e.bencode());
 
-            FileUtils.writeByteArrayToFile(resumeTorrentFile(ti.infoHash().toString()), arr);
+            FileUtils.writeByteArrayToFile(createResumeTorrentFile(ti.infoHash().toString()), arr);
         } catch (Throwable e) {
             LOG.warn("Error saving resume torrent", e);
         }

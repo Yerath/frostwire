@@ -149,18 +149,6 @@ public final class BTEngine extends SessionManager {
         super.moveStorage(dataDir);
     }
 
-    @Override
-    public byte[] saveState() {
-        if (swig() == null) {
-            return null;
-        }
-
-        entry e = new entry();
-        swig().save_state(e);
-        e.set(STATE_VERSION_KEY, STATE_VERSION_VALUE);
-        return Vectors.byte_vector2bytes(e.bencode());
-    }
-
     public void download(File torrent, File saveDir, boolean[] selection) {
         if (swig() == null) {
             return;
