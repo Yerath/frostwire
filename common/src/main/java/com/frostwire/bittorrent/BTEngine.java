@@ -65,6 +65,7 @@ public final class BTEngine extends SessionManager {
      * Data class for getting defaul directories
      */
     public static final BTContext ctx = new BTContext();
+    private static final BTFile btFile = new BTFile(ctx);
 
     private final InnerListener innerListener;
     private final Queue<RestoreDownloadTask> restoreDownloadsQueue;
@@ -165,7 +166,7 @@ public final class BTEngine extends SessionManager {
             return;
         }
 
-        saveDir = setupSaveDir(saveDir);
+        saveDir = btFile.setupSaveDir(saveDir);
         if (saveDir == null) {
             return;
         }
@@ -194,7 +195,7 @@ public final class BTEngine extends SessionManager {
         download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(null).createTorrentContainer());
 
         if (!exists) {
-            saveResumeTorrent(ti);
+            btFile.saveResumeTorrent(ti);
         }
     }
 
@@ -207,7 +208,7 @@ public final class BTEngine extends SessionManager {
             return;
         }
 
-        saveDir = setupSaveDir(saveDir);
+        saveDir = btFile.setupSaveDir(saveDir);
         if (saveDir == null) {
             return;
         }
@@ -236,9 +237,9 @@ public final class BTEngine extends SessionManager {
         download(new TorrentContainerBuilder().setTi(ti).setSaveDir(saveDir).setPriorities(priorities).setResumeFile(null).setPeers(peers).createTorrentContainer());
 
         if (!torrentHandleExists) {
-            saveResumeTorrent(ti);
+            btFile.saveResumeTorrent(ti);
             if (!dontSaveTorrentFile) {
-                saveTorrent(ti);
+                btFile.saveTorrent(ti);
             }
         }
     }
@@ -252,7 +253,7 @@ public final class BTEngine extends SessionManager {
             return;
         }
 
-        saveDir = setupSaveDir(saveDir);
+        saveDir = btFile.setupSaveDir(saveDir);
         if (saveDir == null) {
             return;
         }
@@ -276,9 +277,9 @@ public final class BTEngine extends SessionManager {
         }
 
         if (!exists) {
-            saveResumeTorrent(ti);
+            btFile.saveResumeTorrent(ti);
             if (!dontSaveTorrentFile) {
-                saveTorrent(ti);
+                btFile.saveTorrent(ti);
             }
         }
     }
@@ -305,10 +306,9 @@ public final class BTEngine extends SessionManager {
                 try {
                     String infoHash = FilenameUtils.getBaseName(t.getName());
                     if (infoHash != null) {
-                        File resumeFile = resumeDataFile(infoHash);
-
-                        File savePath = readSavePath(infoHash);
-                        if (setupSaveDir(savePath) == null) {
+                        File resumeFile = btFile.resumeDataFile(infoHash);
+                        File savePath = btFile.readSavePath(infoHash);
+                        if (btFile.setupSaveDir(savePath) == null) {
                             LOG.warn("Can't create data dir or mount point is not accessible");
                             return;
                         }
@@ -324,87 +324,6 @@ public final class BTEngine extends SessionManager {
         migrateVuzeDownloads();
 
         runNextRestoreDownloadTask();
-    }
-
-    File resumeTorrentFile(String infoHash) {
-        return new File(ctx.homeDir, infoHash + ".torrent");
-    }
-
-    File torrentFile(String name) {
-        return new File(ctx.torrentsDir, name + ".torrent");
-    }
-
-    File resumeDataFile(String infoHash) {
-        return new File(ctx.homeDir, infoHash + ".resume");
-    }
-
-    File readTorrentPath(String infoHash) {
-        File torrent = null;
-
-        try {
-            byte[] arr = FileUtils.readFileToByteArray(resumeTorrentFile(infoHash));
-            entry e = entry.bdecode(Vectors.bytes2byte_vector(arr));
-            torrent = new File(e.dict().get(TORRENT_ORIG_PATH_KEY).string());
-        } catch (Throwable e) {
-            // can't recover original torrent path
-        }
-
-        return torrent;
-    }
-
-    File readSavePath(String infoHash) {
-        File savePath = null;
-
-        try {
-            byte[] arr = FileUtils.readFileToByteArray(resumeDataFile(infoHash));
-            entry e = entry.bdecode(Vectors.bytes2byte_vector(arr));
-            savePath = new File(e.dict().get("save_path").string());
-        } catch (Throwable e) {
-            // can't recover original torrent path
-        }
-
-        return savePath;
-    }
-
-    private void saveTorrent(TorrentInfo ti) {
-        File torrentFile;
-
-        try {
-            String name = getEscapedFilename(ti);
-
-            torrentFile = torrentFile(name);
-            byte[] arr = ti.toEntry().bencode();
-
-            FileSystem fs = Platforms.get().fileSystem();
-            fs.write(torrentFile, arr);
-            fs.scan(torrentFile);
-        } catch (Throwable e) {
-            LOG.warn("Error saving torrent info to file", e);
-        }
-
-    }
-
-    private void saveResumeTorrent(TorrentInfo ti) {
-
-        try {
-            String name = getEscapedFilename(ti);
-
-            entry e = ti.toEntry().swig();
-            e.dict().set(TORRENT_ORIG_PATH_KEY, new entry(torrentFile(name).getAbsolutePath()));
-            byte[] arr = Vectors.byte_vector2bytes(e.bencode());
-
-            FileUtils.writeByteArrayToFile(resumeTorrentFile(ti.infoHash().toString()), arr);
-        } catch (Throwable e) {
-            LOG.warn("Error saving resume torrent", e);
-        }
-    }
-
-    private String getEscapedFilename(TorrentInfo ti) {
-        String name = ti.name();
-        if (name == null || name.length() == 0) {
-            name = ti.infoHash().toString();
-        }
-        return escapeFilename(name);
     }
 
     private void fireStarted() {
@@ -486,7 +405,7 @@ public final class BTEngine extends SessionManager {
                         if (torrent.exists() && saveDir.exists()) {
                             LOG.info("Restored old vuze download: " + torrent);
                             restoreDownloadsQueue.add(new RestoreDownloadTask(torrent, saveDir, priorities, null));
-                            saveResumeTorrent(new TorrentInfo(torrent));
+                            btFile.saveResumeTorrent(new TorrentInfo(torrent));
                         }
                     } catch (Throwable e) {
                         LOG.error("Error restoring vuze torrent download", e);
@@ -498,34 +417,6 @@ public final class BTEngine extends SessionManager {
         } catch (Throwable e) {
             LOG.error("Error migrating old vuze downloads", e);
         }
-    }
-
-    private File setupSaveDir(File saveDir) {
-        File result = null;
-
-        if (saveDir == null) {
-            if (ctx.dataDir != null) {
-                result = ctx.dataDir;
-            } else {
-                LOG.warn("Unable to setup save dir path, review your logic, both saveDir and ctx.dataDir are null.");
-            }
-        } else {
-            result = saveDir;
-        }
-
-        FileSystem fs = Platforms.get().fileSystem();
-
-        if (result != null && !fs.isDirectory(result) && !fs.mkdirs(result)) {
-            result = null;
-            LOG.warn("Failed to create save dir to download");
-        }
-
-        if (result != null && !fs.canWrite(result)) {
-            result = null;
-            LOG.warn("Failed to setup save dir with write access");
-        }
-
-        return result;
     }
 
     private void runNextRestoreDownloadTask() {
@@ -565,11 +456,6 @@ public final class BTEngine extends SessionManager {
         } else { // new download
             download(torrentContainer.getTi(), torrentContainer.getSaveDir(), torrentContainer.getResumeFile(), torrentContainer.getPriorities(), torrentContainer.getPeers());
         }
-    }
-
-    // this is here until we have a properly done OS utils.
-    private static String escapeFilename(String s) {
-        return s.replaceAll("[\\\\/:*?\"<>|\\[\\]]+", "_");
     }
 
     private final class InnerListener implements AlertListener {
