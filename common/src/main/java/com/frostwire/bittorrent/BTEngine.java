@@ -47,6 +47,7 @@ import com.frostwire.platform.Platforms;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.util.Logger;
 
+import javafx.scene.layout.Priority;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -388,27 +389,25 @@ public final class BTEngine extends SessionManager {
 
     private void migrateVuzeDownloads() {
         try {
+            //Initialize files
             File dir = new File(ctx.homeDir.getParent(), "azureus");
             File file = new File(dir, "downloads.config");
 
             if (file.exists()) {
+                //Get all entries
                 Entry configEntry = Entry.bdecode(file);
                 List<Entry> downloads = configEntry.dictionary().get("downloads").list();
 
                 for (Entry d : downloads) {
+                    //PEr entry try:
                     try {
+                        //Set all the folders en priorities and restore them when it exisits...
                         Map<String, Entry> map = d.dictionary();
                         File saveDir = new File(map.get("save_dir").string());
                         File torrent = new File(map.get("torrent").string());
                         List<Entry> filePriorities = map.get("file_priorities").list();
 
-                        Priority[] priorities = Priority.array(Priority.IGNORE, filePriorities.size());
-                        for (int i = 0; i < filePriorities.size(); i++) {
-                            long p = filePriorities.get(i).integer();
-                            if (p != 0) {
-                                priorities[i] = Priority.NORMAL;
-                            }
-                        }
+                        Priority[] priorities = setVuzeDownloadPriorities(filePriorities);
 
                         if (torrent.exists() && saveDir.exists()) {
                             LOG.info("Restored old vuze download: " + torrent);
@@ -425,6 +424,17 @@ public final class BTEngine extends SessionManager {
         } catch (Throwable e) {
             LOG.error("Error migrating old vuze downloads", e);
         }
+    }
+
+    private Priority[] setVuzeDownloadPriorities(List<Entry> filePriorities) {
+        Priority[] priorities = Priority.array(Priority.IGNORE, filePriorities.size());
+        for (int i = 0; i < filePriorities.size(); i++) {
+            long p = filePriorities.get(i).integer();
+            if (p != 0) {
+                priorities[i] = Priority.NORMAL;
+            }
+        }
+        return priorities;
     }
 
     private void runNextRestoreDownloadTask() {
