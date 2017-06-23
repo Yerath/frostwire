@@ -401,19 +401,7 @@ public final class BTEngine extends SessionManager {
                 for (Entry d : downloads) {
                     //PEr entry try:
                     try {
-                        //Set all the folders en priorities and restore them when it exisits...
-                        Map<String, Entry> map = d.dictionary();
-                        File saveDir = new File(map.get("save_dir").string());
-                        File torrent = new File(map.get("torrent").string());
-                        List<Entry> filePriorities = map.get("file_priorities").list();
-
-                        Priority[] priorities = setVuzeDownloadPriorities(filePriorities);
-
-                        if (torrent.exists() && saveDir.exists()) {
-                            LOG.info("Restored old vuze download: " + torrent);
-                            restoreDownloadsQueue.add(new RestoreDownloadTask(torrent, saveDir, priorities, null));
-                            btFile.saveResumeTorrent(new TorrentInfo(torrent));
-                        }
+                        restoreOldVuzeDownload(d);
                     } catch (Throwable e) {
                         LOG.error("Error restoring vuze torrent download", e);
                     }
@@ -423,6 +411,22 @@ public final class BTEngine extends SessionManager {
             }
         } catch (Throwable e) {
             LOG.error("Error migrating old vuze downloads", e);
+        }
+    }
+
+    private void restoreOldVuzeDownload(Entry d) {
+        //Set all the folders en priorities and restore them when it exisits...
+        Map<String, Entry> map = d.dictionary();
+        File saveDir = new File(map.get("save_dir").string());
+        File torrent = new File(map.get("torrent").string());
+        List<Entry> filePriorities = map.get("file_priorities").list();
+
+        Priority[] priorities = setVuzeDownloadPriorities(filePriorities);
+
+        if (torrent.exists() && saveDir.exists()) {
+            LOG.info("Restored old vuze download: " + torrent);
+            restoreDownloadsQueue.add(new RestoreDownloadTask(torrent, saveDir, priorities, null));
+            btFile.saveResumeTorrent(new TorrentInfo(torrent));
         }
     }
 
