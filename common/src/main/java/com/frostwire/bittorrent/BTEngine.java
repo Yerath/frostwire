@@ -311,10 +311,7 @@ public final class BTEngine extends SessionManager {
             return;
         }
 
-        if (ctx.homeDir == null || !ctx.homeDir.exists()) {
-            LOG.warn("Wrong setup with BTEngine home dir");
-            return;
-        }
+        if (checkContextDir()) return;
 
         File[] torrents = ctx.homeDir.listFiles(new FilenameFilter() {
             @Override
@@ -346,6 +343,14 @@ public final class BTEngine extends SessionManager {
         migrateVuzeDownloads();
 
         runNextRestoreDownloadTask();
+    }
+
+    private boolean checkContextDir() {
+        if (ctx.homeDir == null || !ctx.homeDir.exists()) {
+            LOG.warn("Wrong setup with BTEngine home dir");
+            return true;
+        }
+        return false;
     }
 
     private void fireStarted() {
