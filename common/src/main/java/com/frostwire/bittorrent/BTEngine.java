@@ -389,33 +389,37 @@ public final class BTEngine extends SessionManager {
 
     private void migrateVuzeDownloads() {
         try {
-            //Initialize files
-            File dir = new File(ctx.homeDir.getParent(), "azureus");
-            File file = new File(dir, "downloads.config");
-
-            if (file.exists()) {
-                //Get all entries
-                Entry configEntry = Entry.bdecode(file);
-                List<Entry> downloads = configEntry.dictionary().get("downloads").list();
-
-                for (Entry d : downloads) {
-                    //PEr entry try:
-                    try {
-                        restoreOldVuzeDownload(d);
-                    } catch (Throwable e) {
-                        LOG.error("Error restoring vuze torrent download", e);
-                    }
-                }
-
-                file.delete();
-            }
+            resumeVuzeDownloadsFromFile();
         } catch (Throwable e) {
             LOG.error("Error migrating old vuze downloads", e);
         }
     }
 
+    private void resumeVuzeDownloadsFromFile() {
+        File dir = new File(ctx.homeDir.getParent(), "azureus");
+        File file = new File(dir, "downloads.config");
+
+        if (file.exists()) {
+            restoreOldVuzeDownloadsForAllEntries(file);
+        }
+    }
+
+    private void restoreOldVuzeDownloadsForAllEntries(File file) {
+        Entry configEntry = Entry.bdecode(file);
+        List<Entry> downloads = configEntry.dictionary().get("downloads").list();
+
+        for (Entry d : downloads) {
+            try {
+                restoreOldVuzeDownload(d);
+            } catch (Throwable e) {
+                LOG.error("Error restoring vuze torrent download", e);
+            }
+        }
+
+        file.delete();
+    }
+
     private void restoreOldVuzeDownload(Entry d) {
-        //Set all the folders en priorities and restore them when it exisits...
         Map<String, Entry> map = d.dictionary();
         File saveDir = new File(map.get("save_dir").string());
         File torrent = new File(map.get("torrent").string());
