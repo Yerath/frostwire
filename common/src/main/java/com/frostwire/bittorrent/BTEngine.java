@@ -443,26 +443,28 @@ public final class BTEngine extends SessionManager {
 
     private void download(TorrentContainer torrentContainer) {
 
-        TorrentHandle th = find(torrentContainer.getTi().infoHash());
+        TorrentInfo ti = torrentContainer.getTi();
+        TorrentHandle th = find(ti.infoHash());
+        Priority[] priorities = torrentContainer.getPriorities();
 
         if (th != null) {
             // found a download with the same hash, just adjust the priorities if needed
-            if (torrentContainer.getPriorities() != null) {
-                if (torrentContainer.getTi().numFiles() != torrentContainer.getPriorities().length) {
+            if (priorities != null) {
+                if (ti.numFiles() != priorities.length) {
                     throw new IllegalArgumentException("The priorities length should be equals to the number of files");
                 }
 
-                th.prioritizeFiles(torrentContainer.getPriorities());
+                th.prioritizeFiles(priorities);
                 fireDownloadUpdate(th);
                 th.resume();
             } else {
                 // did they just add the entire torrent (therefore not selecting any priorities)
-                th.prioritizeFiles(Priority.array(Priority.NORMAL, torrentContainer.getTi().numFiles()));
+                th.prioritizeFiles(Priority.array(Priority.NORMAL, ti.numFiles()));
                 fireDownloadUpdate(th);
                 th.resume();
             }
         } else { // new download
-            download(torrentContainer.getTi(), torrentContainer.getSaveDir(), torrentContainer.getResumeFile(), torrentContainer.getPriorities(), torrentContainer.getPeers());
+            download(ti, torrentContainer.getSaveDir(), torrentContainer.getResumeFile(), priorities, torrentContainer.getPeers());
         }
     }
 
